@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:transport_app/Screens/Map.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -29,7 +31,7 @@ class _HomePageState extends State<HomePage> {
             ),
             const SizedBox(height: 5),
             Text(
-              '+91 1234567890', // Replace with dynamic phone number if needed
+              'examplemail@gmail.com', 
               style: TextStyle(
                 color: Color.fromARGB(255, 157, 157, 157),
                 fontSize: 18,
@@ -52,20 +54,25 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(height: 10),
                 _buildClickableContainer('Choose Destination'),
                 SizedBox(height: 20),
-                Container(
-                  width: double.infinity,
-                  height: 45,
-                  decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 250, 30, 78),
-                    borderRadius: BorderRadius.circular(9),
-                  ),
-                  child: Center(
-                    child: Text('Search',
-                    style: TextStyle(
-                      fontFamily: 'Sans',
-                      fontSize: 18,
-                      color: Colors.white
+                GestureDetector(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=> MapViewStart()));
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    height: 45,
+                    decoration: BoxDecoration(
+                      color: Color.fromARGB(255, 250, 30, 78),
+                      borderRadius: BorderRadius.circular(9),
                     ),
+                    child: Center(
+                      child: Text('Search',
+                      style: TextStyle(
+                        fontFamily: 'Sans',
+                        fontSize: 18,
+                        color: Colors.white
+                      ),
+                      ),
                     ),
                   ),
                 ),
