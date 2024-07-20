@@ -134,6 +134,7 @@ router.post(
     }
 
     user.verificationStatus = "VERIFIED";
+    user.otp = "";
 
     await user.save();
 

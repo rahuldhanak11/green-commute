@@ -130,8 +130,8 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     Container(
-                      width: 180,
-                      height: 180,
+                      width: 165,
+                      height: 165,
                       decoration: BoxDecoration(
                         color: Color.fromARGB(255, 37, 31, 50),
                         borderRadius: BorderRadius.circular(9),
@@ -166,24 +166,6 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ],
-                ),
-                const SizedBox(height: 100),
-                Container(
-                  width: double.infinity,
-                  height: 55,
-                  decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 89, 68, 134),
-                    borderRadius: BorderRadius.circular(9),
-                  ),
-                  child: Center(
-                    child: Text('Check Leaderboard',
-                    style: TextStyle(
-                      fontFamily: 'Sans',
-                      fontSize: 20,
-                      color: Colors.white
-                    ),
-                    ),
-                  ),
                 ),
               ],
             ),

@@ -109,7 +109,7 @@ class _MapViewStartState extends State<MapViewStart> {
               },
               child: Container(
                 width: double.infinity,
-                height: 40, 
+                height: 45, 
                 decoration: BoxDecoration(
                   color: Color.fromARGB(255, 250, 30, 78),
                   borderRadius: BorderRadius.circular(9),
