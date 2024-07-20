@@ -6,6 +6,7 @@ const {
   getDistanceMatrix,
   getDirections,
   getGeoCode,
+  getReverseGeoCode,
 } = require("../utils/googlMapsServices");
 
 const router = express.Router();
@@ -24,6 +25,7 @@ router.post("/distance-matrix", async (req, res) => {
 router.post("/directions", async (req, res) => {
   try {
     const response = await getDirections(req.body);
+    console.log(response);
     res.json(response.data);
   } catch (error) {
     res
@@ -58,6 +60,17 @@ router.post("/geocode", async (req, res) => {
   try {
     const response = await getGeoCode(req.body.address);
     res.json(response.data);
+  } catch (error) {
+    res
+      .status(500)
+      .send(error.response ? error.response.data.error_message : error.message);
+  }
+});
+
+router.post("/reverse-geocode", async (req, res) => {
+  try {
+    const response = await getReverseGeoCode(req.body.latlng);
+    res.json(response.data.results[0]["formatted_address"]);
   } catch (error) {
     res
       .status(500)

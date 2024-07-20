@@ -1,14 +1,16 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
-import 'package:transport_app/Screens/Map.dart';
 import 'package:transport_app/google-services-api.dart';
+import 'package:transport_app/Screens/Map.dart';
 
 class HomePage extends StatefulWidget {
   final String username;
   final String email;
 
-  const HomePage({required this.username, required this.email, Key? key}) : super(key: key);
+  const HomePage({required this.username, required this.email, Key? key})
+      : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -16,6 +18,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final GooglePlacesService _placesService = GooglePlacesService();
+  final GoogleGeoCodeService _geoCodeService = GoogleGeoCodeService();
   List<String> _srcSuggestions = [];
   List<String> _destSuggestions = [];
   final TextEditingController _sourceController = TextEditingController();
@@ -31,12 +34,12 @@ class _HomePageState extends State<HomePage> {
           _destSuggestions = suggestions;
         }
       });
-        } catch (e) {
+    } catch (e) {
       print('Error fetching suggestions: $e');
     }
   }
 
-  void _navigateToMap() {
+  void _navigateToMap() async {
     final source = _sourceController.text;
     final destination = _destinationController.text;
 
@@ -45,15 +48,22 @@ class _HomePageState extends State<HomePage> {
       return;
     }
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => MapViewStart(
-          source: source,
-          destination: destination,
+    try {
+      final sourceCoords = await _geoCodeService.getGeoCode(source);
+      final destCoords = await _geoCodeService.getGeoCode(destination);
+      print(sourceCoords);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MapScreen(
+            sourceLatLng: LatLng(sourceCoords['lat'], sourceCoords['lng']),
+            destinationLatLng: LatLng(destCoords['lat'], destCoords['lng']),
+          ),
         ),
-      ),
-    );
+      );
+    } catch (e) {
+      print('Error fetching geocode: $e');
+    }
   }
 
   @override
@@ -270,7 +280,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildSourceSuggestionList() {
     return Positioned(
-      top: 250, // Adjust based on the position of your source text field
+      top: 250,
       left: 0,
       right: 0,
       child: Container(
@@ -302,7 +312,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildDestSuggestionList() {
     return Positioned(
-      top: 300, // Adjust based on the position of your destination text field
+      top: 300,
       left: 0,
       right: 0,
       child: Container(

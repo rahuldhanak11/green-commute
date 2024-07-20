@@ -29,6 +29,7 @@ function getDirections(userSelectionObject) {
         mode: userSelectionObject.mode,
         avoid: userSelectionObject.avoid,
         alternatives: true,
+        departure_time: "now",
         units: "metric",
         // arrival_time: Date,
         traffic_model: "best_guess",
@@ -53,6 +54,7 @@ function getDistanceMatrix(userSelectionObject) {
         mode: userSelectionObject.mode,
         avoid: userSelectionObject.avoid,
         alternatives: true,
+        departure_time: "now",
         units: "metric",
         traffic_model: "best_guess",
         key: apiKey,
@@ -80,9 +82,26 @@ function getGeoCode(locationInput) {
     .catch((error) => console.error(`Failed to get Geocode ERROR: ${error}`));
 }
 
+function getReverseGeoCode(latlng) {
+  return client
+    .reverseGeocode({
+      params: {
+        latlng: latlng,
+        key: apiKey,
+      },
+    })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) =>
+      console.error("Failed to get Reverse Geocode ERROR: ${error}")
+    );
+}
+
 module.exports = {
   getPlaceSuggestions,
   getDirections,
   getDistanceMatrix,
   getGeoCode,
+  getReverseGeoCode,
 };
