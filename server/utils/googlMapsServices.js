@@ -4,54 +4,80 @@ const client = new Client({});
 const apiKey = process.env.GOOGLE_MAPS_API_KEY;
 
 function getPlaceSuggestions(input) {
-  return client.placeAutocomplete({
-    params: {
-      input,
-      key: apiKey,
-    },
-  });
+  return client
+    .placeAutocomplete({
+      params: {
+        input,
+        key: apiKey,
+      },
+    })
+    .then((response) => {
+      console.log(response);
+      return response;
+    })
+    .catch((error) =>
+      console.error(`Failed to get Place Suggestions ERROR: ${error}`)
+    );
 }
 
 function getDirections(userSelectionObject) {
-  return client.directions({
-    params: {
-      origin: userSelectionObject.src,
-      destination: userSelectionObject.destn,
-      mode: userSelectionObject.mode,
-      avoid: userSelectionObject.avoid ? "" : userSelectionObject.avoid,
-      alternatives: true,
-      units: "metric",
-      departure_time: userSelectionObject.departure_time || "now",
-      // arrival_time: Date,
-      traffic_model: "best_guess",
-      key: apiKey,
-    },
-  });
+  return client
+    .directions({
+      params: {
+        origin: userSelectionObject.src,
+        destination: userSelectionObject.destn,
+        mode: userSelectionObject.mode,
+        avoid: userSelectionObject.avoid,
+        alternatives: true,
+        units: "metric",
+        // arrival_time: Date,
+        traffic_model: "best_guess",
+        key: apiKey,
+      },
+    })
+    .then((response) => {
+      console.log(response);
+      return response;
+    })
+    .catch((error) =>
+      console.error(`Failed to get Directions ERROR: ${error}`)
+    );
 }
 
 function getDistanceMatrix(userSelectionObject) {
-  return client.distancematrix({
-    params: {
-      origins: userSelectionObject.src,
-      destinations: userSelectionObject.destn,
-      mode: userSelectionObject.mode,
-      avoid: userSelectionObject.avoid ? "" : userSelectionObject.avoid,
-      alternatives: true,
-      units: "metric",
-      traffic_model: "best_guess",
-      departure_time: userSelectionObject.departure_time || "now",
-      key: apiKey,
-    },
-  });
+  return client
+    .distancematrix({
+      params: {
+        origins: userSelectionObject.src,
+        destinations: userSelectionObject.destn,
+        mode: userSelectionObject.mode,
+        avoid: userSelectionObject.avoid,
+        alternatives: true,
+        units: "metric",
+        traffic_model: "best_guess",
+        key: apiKey,
+      },
+    })
+    .then((response) => {
+      console.log(response);
+      return response;
+    })
+    .catch((error) => console.error(`Failed to get Distance ERROR: ${error}`));
 }
 
 function getGeoCode(locationInput) {
-  return client.geocode({
-    params: {
-      address: locationInput,
-      key: apiKey,
-    },
-  });
+  return client
+    .geocode({
+      params: {
+        address: locationInput,
+        key: apiKey,
+      },
+    })
+    .then((response) => {
+      console.log(response);
+      return response;
+    })
+    .catch((error) => console.error(`Failed to get Geocode ERROR: ${error}`));
 }
 
 module.exports = {

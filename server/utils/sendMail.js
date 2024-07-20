@@ -24,7 +24,7 @@ const sendEmailForVerification = async (fullName, email, otp) => {
       intro:
         "Welcome to Green-Commute! We're very excited to have you on board.",
       action: {
-        instructions: 'This is your OTP to signin',
+        instructions: 'This is your OTP to sign in',
         button: {
           color: '#22BC66',
           text: otp,

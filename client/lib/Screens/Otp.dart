@@ -1,15 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:transport_app/Navbar.dart';
-import 'package:transport_app/Screens/Home.dart';
+import 'package:transport_app/Screens/Login.dart';
+import 'package:transport_app/api-service.dart';
 
 class OtpScreen extends StatefulWidget {
-  const OtpScreen({super.key});
+  final String userId;
+
+  const OtpScreen({required this.userId, Key? key}) : super(key: key);
 
   @override
   State<OtpScreen> createState() => _OtpScreenState();
 }
 
 class _OtpScreenState extends State<OtpScreen> {
+  final _otpControllers = List<TextEditingController>.generate(4, (_) => TextEditingController());
+  bool _isLoading = false;
+
+  void _verifyOtp() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    String   otp = _otpControllers.map((controller) => controller.text).join();
+    print('OTP: $otp');
+    print('User ID: ${widget.userId}');
+
+    try {
+      final response = await ApiService.verifyOtp(widget.userId, otp);
+
+      if (response['data'] != null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => LoginPage()),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('OTP verification failed: ${response['error']}')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('OTP verification failed: $e')),
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -55,12 +94,7 @@ class _OtpScreenState extends State<OtpScreen> {
                     padding: const EdgeInsets.fromLTRB(16,0,16,0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        _buildOtpField(),
-                        _buildOtpField(),
-                        _buildOtpField(),
-                        _buildOtpField(),
-                      ],
+                      children: List.generate(4, (index) => _buildOtpField(index)),
                     ),
                   ),
                 ],
@@ -74,7 +108,7 @@ class _OtpScreenState extends State<OtpScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: ElevatedButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=> Navbar()));
+                _isLoading ? null : _verifyOtp();
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color.fromARGB(255, 250, 30, 78),
@@ -83,15 +117,17 @@ class _OtpScreenState extends State<OtpScreen> {
                   borderRadius: BorderRadius.circular(15),
                 ),
               ),
-              child: Text(
-                'Verify OTP',
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.white,
-                  fontFamily: 'Sans',
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
+              child: _isLoading
+                  ? CircularProgressIndicator(color: Colors.white)
+                  : Text(
+                      'Verify OTP',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.white,
+                        fontFamily: 'Sans',
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
             ),
           ),
         ],
@@ -99,7 +135,7 @@ class _OtpScreenState extends State<OtpScreen> {
     );
   }
 
-  Widget _buildOtpField() {
+  Widget _buildOtpField(int index) {
     return Container(
       width: 60,
       height: 60,
@@ -108,6 +144,7 @@ class _OtpScreenState extends State<OtpScreen> {
         borderRadius: BorderRadius.circular(5),
       ),
       child: TextField(
+        controller: _otpControllers[index],
         keyboardType: TextInputType.number,
         textAlign: TextAlign.center,
         style: TextStyle(

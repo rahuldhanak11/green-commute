@@ -111,8 +111,6 @@ router.post(
     body("otp")
       .exists()
       .withMessage("OTP is required")
-      .isInt({ min: 1000, max: 9999 })
-      .withMessage("OTP must be a 4-digit integer")
       .isLength({ min: 4, max: 4 })
       .withMessage("OTP must be exactly 4 characters long"),
   ],

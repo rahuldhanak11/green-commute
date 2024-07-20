@@ -1,5 +1,55 @@
 const { Schema, model } = require('mongoose');
 
+const postSchema = new Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+      required: true,
+    },
+    image: {
+      type: String,
+      required: true,
+    },
+    venue: {
+      type: String,
+      required: true,
+    },
+    totalCapacity: {
+      type: Number,
+      required: true,
+    },
+    timing: {
+      type: String,
+      required: true,
+    },
+    noOfLikes: {
+      type: Number,
+      default: 0,
+    },
+    likedBy: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
+    noOfComments: {
+      type: Number,
+      default: 0,
+    },
+    commentedBy: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
+  },
+  { timestamps: true }
+);
+
 const communitySchema = new Schema(
   {
     name: {
@@ -19,7 +69,7 @@ const communitySchema = new Schema(
       type: Number,
       default: 0,
     },
-    userJoined: [
+    usersJoined: [
       {
         type: Schema.Types.ObjectId,
         ref: 'User',
@@ -28,22 +78,13 @@ const communitySchema = new Schema(
     createdBy: {
       type: Schema.Types.ObjectId,
       ref: 'User',
+      required: true,
     },
-    messages: [
-      {
-        sendBy: {
-          type: Schema.Types.ObjectId,
-          ref: 'User',
-        },
-        text: {
-          type: String,
-        },
-      },
-    ],
+    posts: [postSchema],
   },
   { timestamps: true }
 );
 
-const Community = model('Communtiy', communitySchema);
+const Community = model('Community', communitySchema);
 
 module.exports = { Community };
