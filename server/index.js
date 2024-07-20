@@ -13,7 +13,7 @@ app.use(express.json());
 
 app.use("/api/auth", require("./routes/user.routes"));
 app.use("/api/trip", require("./routes/trip.routes"));
-// app.use('/api/booking', require('./routes/booking'))
+app.use("/api/map", require("./routes/map.routes"));
 // app.use('/api/products', require('./routes/products'))
 
 app.listen(port, () => {
