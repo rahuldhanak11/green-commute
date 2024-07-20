@@ -3,12 +3,11 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { body, validationResult } = require("express-validator");
 const User = require("../models/user.model");
-const fetchUser = require("../middleware/auth");
 require("dotenv").config();
 
 const router = express.Router();
 
-// Register Client
+// Register User
 router.post(
   "/register/user",
   [
@@ -55,6 +54,12 @@ router.post(
         state,
         pincode,
         phoneNo,
+        verificationStatus: "PENDING",
+        role: "USER",
+        totalCarbonFootPrintSaved: "0",
+        badgesEarned: [],
+        totalRewardPoints: 0,
+        tripsCompleted: [],
       });
 
       await user.save();
@@ -72,7 +77,7 @@ router.post(
   }
 );
 
-// Login Client
+// Login User
 router.post(
   "/login/user",
   [body("email").isEmail(), body("password").exists()],
@@ -90,7 +95,7 @@ router.post(
         return res.status(400).json({ error: "Invalid credentials" });
       }
 
-      const isMatch = await bcrypt.compare(password, client.password);
+      const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
         return res.status(400).json({ error: "Invalid credentials" });
       }

@@ -1,4 +1,5 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model } = require("mongoose");
+const mongoose = require("mongoose");
 
 const userSchema = new Schema(
   {
@@ -21,13 +22,13 @@ const userSchema = new Schema(
     },
     verificationStatus: {
       type: String,
-      enum: ['PENDING', 'VERIFIED'],
-      default: 'PENDING',
+      enum: ["PENDING", "VERIFIED"],
+      default: "PENDING",
     },
     role: {
       type: String,
-      enum: ['USER', 'ADMIN'],
-      default: 'USER',
+      enum: ["USER", "ADMIN"],
+      default: "USER",
     },
     totalCarbonFootPrintSaved: {
       type: String,
@@ -44,11 +45,13 @@ const userSchema = new Schema(
     tripsCompleted: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'Trips',
+        ref: "Trips",
       },
     ],
   },
   { timestamps: true }
 );
 
-export const User = model('User', userSchema);
+const User = mongoose.model("User", userSchema);
+
+module.exports = User;

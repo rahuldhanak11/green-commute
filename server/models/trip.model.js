@@ -1,7 +1,13 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model } = require("mongoose");
+const mongoose = require("mongoose");
 
 const tripSchema = new Schema(
   {
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
     source: [
       {
         lat: {
@@ -31,7 +37,7 @@ const tripSchema = new Schema(
     },
     travelledBy: {
       type: String,
-      enum: ['Driving', 'Bicycle', 'Walking', 'Transit'],
+      enum: ["Driving", "Bicycle", "Walking", "Transit"],
       required: true,
     },
     totalTime: {
@@ -49,4 +55,6 @@ const tripSchema = new Schema(
   { timestamps: true }
 );
 
-export const Trip = model('Trip', tripSchema);
+const Trip = mongoose.model("Trip", tripSchema);
+
+module.exports = Trip;
