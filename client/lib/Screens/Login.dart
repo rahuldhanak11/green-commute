@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:transport_app/Screens/Otp.dart';
+import 'package:transport_app/Screens/Signup.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -10,7 +10,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _numberController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -30,9 +32,9 @@ class _LoginPageState extends State<LoginPage> {
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  SizedBox(height: 75),
                   Text(
                     'Hello there!',
                     style: TextStyle(
@@ -43,25 +45,26 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   const SizedBox(height: 30),
-                  Text(
-                    'Enter your email',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontFamily: 'Sans',
-                    ),
-                  ),
-                  SizedBox(height: 5),
+                  
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Text(
+                        'Email',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontFamily: 'Sans',
+                        ),
+                      ),
                       Container(
                         decoration: BoxDecoration(
                           color: Color.fromARGB(255, 37, 31, 50),
                           borderRadius: BorderRadius.circular(5),
                         ),
                         child: TextField(
-                          controller: _numberController,
-                          keyboardType: TextInputType.phone,
+                          controller: _emailController,
+                          keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             contentPadding: EdgeInsets.symmetric(horizontal: 10),
@@ -77,14 +80,24 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                       ),
+                      SizedBox(height: 10),
+                      Text(
+                        'Password',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontFamily: 'Sans',
+                        ),
+                      ),
+                      SizedBox(height: 5),
                       Container(
                         decoration: BoxDecoration(
                           color: Color.fromARGB(255, 37, 31, 50),
                           borderRadius: BorderRadius.circular(5),
                         ),
                         child: TextField(
-                          controller: _numberController,
-                          keyboardType: TextInputType.phone,
+                          controller: _passwordController,
+                          obscureText: true,
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             contentPadding: EdgeInsets.symmetric(horizontal: 10),
@@ -132,7 +145,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               child: Text(
-                'Login with OTP',
+                'Login',
                 style: TextStyle(
                   fontSize: 18,
                   color: Colors.white,
@@ -142,6 +155,22 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
           ),
+          const SizedBox(height: 10),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => SignUpPage()));
+            },
+            child: Text(
+              "Don't have an account? Sign up here",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 14,
+                fontFamily: 'Sans',
+                decoration: TextDecoration.underline,
+              ),
+            ),
+          ),
+          
         ],
       ),
     );
