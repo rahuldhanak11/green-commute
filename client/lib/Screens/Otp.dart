@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:transport_app/Navbar.dart';
 import 'package:transport_app/Screens/Home.dart';
 
 class OtpScreen extends StatefulWidget {
@@ -32,7 +33,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 // crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Verify your number',
+                    'Verify your Email',
                     style: TextStyle(
                       color: const Color.fromARGB(255, 250, 30, 78),
                       fontSize: 32,
@@ -42,7 +43,7 @@ class _OtpScreenState extends State<OtpScreen> {
                   ),
                   const SizedBox(height: 30),
                   Text(
-                    'Enter the OTP sent to your phone',
+                    'Enter the OTP sent to your email',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,
@@ -73,7 +74,7 @@ class _OtpScreenState extends State<OtpScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: ElevatedButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=> HomePage()));
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> Navbar()));
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color.fromARGB(255, 250, 30, 78),
