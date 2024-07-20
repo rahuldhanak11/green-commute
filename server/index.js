@@ -16,6 +16,7 @@ app.use('/api/auth', require('./routes/user.routes'));
 app.use('/api/trip', require('./routes/trip.routes'));
 app.use('/api/map', require('./routes/map.routes'));
 app.use('/api/community', require('./routes/community.routes'));
+app.use('/api/carbon-emission', require('./routes/carbonEmmsion.routes'));
 // app.use('/api/products', require('./routes/products'))
 
 app.listen(port, () => {

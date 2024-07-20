@@ -1,16 +1,12 @@
 const { Schema, model } = require('mongoose');
 
-const postSchema = new Schema(
+const eventSchema = new Schema(
   {
-    title: {
+    name: {
       type: String,
       required: true,
     },
     description: {
-      type: String,
-      required: true,
-    },
-    image: {
       type: String,
       required: true,
     },
@@ -26,26 +22,11 @@ const postSchema = new Schema(
       type: String,
       required: true,
     },
-    noOfLikes: {
-      type: Number,
-      default: 0,
+    postedBy: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
     },
-    likedBy: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-      },
-    ],
-    noOfComments: {
-      type: Number,
-      default: 0,
-    },
-    commentedBy: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-      },
-    ],
   },
   { timestamps: true }
 );
@@ -79,7 +60,13 @@ const communitySchema = new Schema(
       ref: 'User',
       required: true,
     },
-    posts: [postSchema],
+    posts: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Post',
+      },
+    ],
+    events: [eventSchema],
   },
   { timestamps: true }
 );
