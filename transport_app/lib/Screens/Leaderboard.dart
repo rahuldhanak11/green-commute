@@ -1,10 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:transport_app/leaderboard-service.dart';
 
-class Leaderboard extends StatelessWidget {
+class Leaderboard extends StatefulWidget {
+  @override
+  _LeaderboardState createState() => _LeaderboardState();
+}
+
+class _LeaderboardState extends State<Leaderboard> {
+  bool showOverall = true;
+  Future<List<LeaderboardEntryModel>>? leaderboardFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    leaderboardFuture = LeaderboardService().fetchOverallLeaderboard();
+  }
+
+  void toggleLeaderboard(bool isOverall) {
+    setState(() {
+      showOverall = isOverall;
+      if (isOverall) {
+        leaderboardFuture = LeaderboardService().fetchOverallLeaderboard();
+      } else {
+        leaderboardFuture = LeaderboardService().fetchDailyLeaderboard();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 19, 16, 25), // Dark background color
+      backgroundColor: Color.fromARGB(255, 19, 16, 25),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -21,13 +47,38 @@ class Leaderboard extends StatelessWidget {
               ),
             ),
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextButton(
+                onPressed: () => toggleLeaderboard(true),
+                child: Text(
+                  'Overall',
+                  style: TextStyle(
+                    color: showOverall ? Colors.white : Colors.grey,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+              TextButton(
+                onPressed: () => toggleLeaderboard(false),
+                child: Text(
+                  'Daily',
+                  style: TextStyle(
+                    color: showOverall ? Colors.grey : Colors.white,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+            ],
+          ),
           SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.all(18.0),
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(
-                color: Color.fromARGB(255, 250, 30, 78), // Distinct color
+                color: Color.fromARGB(255, 250, 30, 78),
                 borderRadius: BorderRadius.circular(9),
               ),
               child: Padding(
@@ -69,15 +120,29 @@ class Leaderboard extends StatelessWidget {
           ),
           SizedBox(height: 10),
           Expanded(
-            child: ListView(
-              children: [
-                LeaderboardEntry(rank: '1st', name: 'Player 1', emission: '60 kg CO2'),
-                LeaderboardEntry(rank: '2nd', name: 'Player 2', emission: '80 kg CO2'),
-                LeaderboardEntry(rank: '3rd', name: 'Player 3', emission: '100 kg CO2'),
-                LeaderboardEntry(rank: '4th', name: 'Player 4', emission: '150 kg CO2'),
-                LeaderboardEntry(rank: '5th', name: 'Player 5', emission: '161 kg CO2'),
-                // Add more entries here
-              ],
+            child: FutureBuilder<List<LeaderboardEntryModel>>(
+              future: leaderboardFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return Center(child: Text('No data available'));
+                } else {
+                  return ListView.builder(
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) {
+                      var entry = snapshot.data![index];
+                      return LeaderboardEntry(
+                        rank: (index + 1).toString(),
+                        name: entry.fullName,
+                        emission: '${entry.carbonSaved} kg CO2',
+                      );
+                    },
+                  );
+                }
+              },
             ),
           ),
         ],
@@ -91,23 +156,27 @@ class LeaderboardEntry extends StatelessWidget {
   final String name;
   final String emission;
 
-  LeaderboardEntry({required this.rank, required this.name, required this.emission});
+  LeaderboardEntry({
+    required this.rank,
+    required this.name,
+    required this.emission,
+  });
 
   @override
   Widget build(BuildContext context) {
     Color rankColor;
     Color borderColor;
     switch (rank) {
-      case '1st':
-        rankColor = Colors.amber; // Gold
+      case '1':
+        rankColor = Colors.amber;
         borderColor = Colors.amber;
         break;
-      case '2nd':
-        rankColor = Colors.grey; // Silver
+      case '2':
+        rankColor = Colors.grey;
         borderColor = Colors.grey;
         break;
-      case '3rd':
-        rankColor = Color.fromARGB(255, 205, 127, 50); // Bronze
+      case '3':
+        rankColor = Color.fromARGB(255, 205, 127, 50);
         borderColor = Color.fromARGB(255, 205, 127, 50);
         break;
       default:
@@ -119,7 +188,7 @@ class LeaderboardEntry extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       child: Container(
         width: double.infinity,
-        padding: EdgeInsets.fromLTRB(8,16,8,16),
+        padding: EdgeInsets.fromLTRB(8, 16, 8, 16),
         decoration: BoxDecoration(
           color: Color.fromARGB(255, 37, 31, 50),
           borderRadius: BorderRadius.circular(9.0),

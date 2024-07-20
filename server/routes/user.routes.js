@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const { body, validationResult } = require("express-validator");
 const { User } = require("../models/user.model");
 const { generateSecureOTP } = require("../utils/generateOtp");
+const fetchUser = require("../middlewares/auth");
 const { sendEmailForVerification } = require("../utils/sendMail");
 require("dotenv").config();
 
@@ -105,6 +106,7 @@ router.post(
   }
 );
 
+// Verify Otp
 router.post(
   "/verify-otp/:id",
   [
@@ -148,5 +150,93 @@ router.post(
     });
   }
 );
+
+router.post("/save-carbon-footprint", fetchUser, async (req, res) => {
+  try {
+    const { carbonSaved } = req.body;
+    const userId = req.user._id;
+    if (!userId || !carbonSaved) {
+      return res
+        .status(400)
+        .json({ message: "User ID and carbon saved are required." });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    const today = new Date();
+    const startOfDay = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate()
+    );
+
+    let dailyFootprint = user.dailyCarbonFootprints.find(
+      (footprint) => footprint.date.getTime() === startOfDay.getTime()
+    );
+
+    if (dailyFootprint) {
+      dailyFootprint.carbonSaved += carbonSaved;
+    } else {
+      user.dailyCarbonFootprints.push({ date: startOfDay, carbonSaved });
+    }
+
+    user.totalCarbonFootPrintSaved += carbonSaved;
+
+    await user.save();
+
+    res.status(200).json({ message: "Carbon footprint saved successfully." });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error." });
+  }
+});
+
+router.get("/leaderboard/overall", async (req, res) => {
+  try {
+    const users = await User.find()
+      .sort({ totalCarbonFootPrintSaved: -1 })
+      .select("fullName totalCarbonFootPrintSaved")
+      .exec();
+
+    res.status(200).json(users);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error." });
+  }
+});
+
+router.get("/leaderboard/daily", async (req, res) => {
+  try {
+    const today = new Date();
+    const startOfDay = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate()
+    );
+
+    const users = await User.aggregate([
+      { $unwind: "$dailyCarbonFootprints" },
+      { $match: { "dailyCarbonFootprints.date": startOfDay } },
+      {
+        $group: {
+          _id: "$_id",
+          fullName: { $first: "$fullName" },
+          dailyCarbonFootPrintSaved: {
+            $sum: "$dailyCarbonFootprints.carbonSaved",
+          },
+        },
+      },
+      { $sort: { dailyCarbonFootPrintSaved: -1 } },
+    ]);
+
+    res.status(200).json(users);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error." });
+  }
+});
 
 module.exports = router;

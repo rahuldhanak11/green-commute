@@ -1,5 +1,18 @@
-const { Schema, model } = require('mongoose');
-const mongoose = require('mongoose');
+const { Schema, model } = require("mongoose");
+
+const dailyFootprintSchema = new Schema(
+  {
+    date: {
+      type: Date,
+      required: true,
+    },
+    carbonSaved: {
+      type: Number,
+      required: true,
+    },
+  },
+  { _id: false }
+);
 
 const userSchema = new Schema(
   {
@@ -22,16 +35,17 @@ const userSchema = new Schema(
     },
     verificationStatus: {
       type: String,
-      enum: ['PENDING', 'VERIFIED'],
-      default: 'PENDING',
+      enum: ["PENDING", "VERIFIED"],
+      default: "PENDING",
     },
     role: {
       type: String,
-      enum: ['USER', 'ADMIN'],
-      default: 'USER',
+      enum: ["USER", "ADMIN"],
+      default: "USER",
     },
     totalCarbonFootPrintSaved: {
-      type: String,
+      type: Number,
+      default: 0,
     },
     badgesEarned: [
       {
@@ -45,13 +59,14 @@ const userSchema = new Schema(
     tripsCompleted: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'Trips',
+        ref: "Trips",
       },
     ],
+    dailyCarbonFootprints: [dailyFootprintSchema],
   },
   { timestamps: true }
 );
 
-const User = model('User', userSchema);
+const User = model("User", userSchema);
 
 module.exports = { User };
