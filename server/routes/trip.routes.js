@@ -1,7 +1,7 @@
 const express = require("express");
 const { body, validationResult } = require("express-validator");
 const fetchUser = require("../middlewares/auth");
-const Trip = require("../models/trip.model");
+const { Trip } = require("../models/trip.model");
 
 const router = express.Router();
 
@@ -35,7 +35,7 @@ router.post(
         carbonFootPrintSaved,
         rewardPointEarned,
       } = req.body;
-      const userId = req.user.id;
+      const userId = req.user._id;
 
       const trip = new Trip({
         userId,
@@ -60,7 +60,7 @@ router.post(
 // Get Trips
 router.get("/get/trips", fetchUser, async (req, res) => {
   try {
-    const trips = await Trip.find({ userId: req.user.id });
+    const trips = await Trip.find({ userId: req.user._id });
     res.json(trips);
   } catch (error) {
     console.error(error.message);
