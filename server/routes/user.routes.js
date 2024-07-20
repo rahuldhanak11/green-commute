@@ -22,18 +22,7 @@ router.post(
     }
 
     try {
-      const {
-        fullName,
-        email,
-        password,
-        age,
-        gender,
-        address,
-        city,
-        state,
-        pincode,
-        phoneNo,
-      } = req.body;
+      const { fullName, email, password } = req.body;
 
       let user = await User.findOne({ email });
       if (user) {
@@ -47,13 +36,6 @@ router.post(
         fullName,
         email,
         password: hashedPassword,
-        age,
-        gender,
-        address,
-        city,
-        state,
-        pincode,
-        phoneNo,
         verificationStatus: "PENDING",
         role: "USER",
         totalCarbonFootPrintSaved: "0",
