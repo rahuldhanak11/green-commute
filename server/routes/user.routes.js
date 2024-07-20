@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
-const User = require('../models/user.model');
+const { User } = require('../models/user.model');
 const { generateSecureOTP } = require('../utils/generateOtp');
 const { sendEmailForVerification } = require('../utils/sendMail');
 require('dotenv').config();
@@ -88,6 +88,10 @@ router.post(
         return res.status(400).json({ error: 'Invalid credentials' });
       }
 
+      if (user.verificationStatus === 'PENDING') {
+        return res.status(400).json({ error: 'OTP Verification Pending' });
+      }
+
       const payload = { _id: user._id, name: user.fullName, role: user.role };
       const authToken = jwt.sign(payload, process.env.JWT_SECRET, {
         expiresIn: '5h',
@@ -120,7 +124,7 @@ router.post(
     const { otp } = req.body;
     const { id } = req.params;
 
-    const user = await User.findById(id);
+    const user = await User.findById({ _id: id });
     if (!user) {
       return res.status(400).json({ error: 'User not registered' });
     }
