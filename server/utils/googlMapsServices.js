@@ -21,6 +21,7 @@ function getDirections(userSelectionObject) {
       avoid: userSelectionObject.avoid ? "" : userSelectionObject.avoid,
       alternatives: true,
       units: "metric",
+      departure_time: userSelectionObject.departure_time || "now",
       // arrival_time: Date,
       traffic_model: "best_guess",
       key: apiKey,
@@ -38,6 +39,7 @@ function getDistanceMatrix(userSelectionObject) {
       alternatives: true,
       units: "metric",
       traffic_model: "best_guess",
+      departure_time: userSelectionObject.departure_time || "now",
       key: apiKey,
     },
   });

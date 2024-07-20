@@ -5,17 +5,14 @@ const {
   getPlaceSuggestions,
   getDistanceMatrix,
   getDirections,
-  getPlaceDetails,
+  getGeoCode,
 } = require("../utils/googlMapsServices");
 
 const router = express.Router();
 
 router.post("/distance-matrix", async (req, res) => {
   try {
-    const response = await getDistanceMatrix(
-      req.body.origins,
-      req.body.destinations
-    );
+    const response = await getDistanceMatrix(req.body);
     res.json(response.data);
   } catch (error) {
     res
@@ -26,7 +23,7 @@ router.post("/distance-matrix", async (req, res) => {
 
 router.post("/directions", async (req, res) => {
   try {
-    const response = await getDirections(req.body.origin, req.body.destination);
+    const response = await getDirections(req.body);
     res.json(response.data);
   } catch (error) {
     res
@@ -49,6 +46,17 @@ router.post("/place-autocomplete", async (req, res) => {
 router.post("/place-details", async (req, res) => {
   try {
     const response = await getPlaceDetails(req.body.place_id);
+    res.json(response.data);
+  } catch (error) {
+    res
+      .status(500)
+      .send(error.response ? error.response.data.error_message : error.message);
+  }
+});
+
+router.post("/geocode", async (req, res) => {
+  try {
+    const response = await getGeoCode(req.body.address);
     res.json(response.data);
   } catch (error) {
     res
