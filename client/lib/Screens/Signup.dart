@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:transport_app/Screens/Login.dart';
+import 'package:transport_app/api-service.dart';
+import 'package:transport_app/Screens/Otp.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -12,6 +15,42 @@ class _SignUpPageState extends State<SignUpPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  bool _isLoading = false;
+
+  void _signUpUser() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final response = await ApiService.signUpUser(
+        _usernameController.text,
+        _emailController.text,
+        _passwordController.text,
+      );
+
+      if (response['data'] != null && response['data']['id'] != null) {
+        // print(response['data']); 
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => OtpScreen(userId: response['data']['id'])),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Sign-up failed: ${response['error']}')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Sign-up failed: $e')),
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+  
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -161,7 +200,7 @@ class _SignUpPageState extends State<SignUpPage> {
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: ElevatedButton(
               onPressed: () {
-                // Handle sign-up action
+                _isLoading ? null : _signUpUser();
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color.fromARGB(255, 250, 30, 78),
@@ -170,15 +209,17 @@ class _SignUpPageState extends State<SignUpPage> {
                   borderRadius: BorderRadius.circular(15),
                 ),
               ),
-              child: Text(
-                'Sign Up',
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.white,
-                  fontFamily: 'Sans',
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
+              child: _isLoading
+                  ? CircularProgressIndicator(color: Colors.white)
+                  : Text(
+                      'Sign Up',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.white,
+                        fontFamily: 'Sans',
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
             ),
           ),
         ],
