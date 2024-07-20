@@ -130,8 +130,8 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     Container(
-                      width: 165,
-                      height: 165,
+                      width: 180,
+                      height: 180,
                       decoration: BoxDecoration(
                         color: Color.fromARGB(255, 37, 31, 50),
                         borderRadius: BorderRadius.circular(9),
