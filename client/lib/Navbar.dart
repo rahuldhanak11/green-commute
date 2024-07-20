@@ -9,7 +9,8 @@ class Navbar extends StatefulWidget {
   final String username;
   final String email;
 
-  const Navbar({required this.username, required this.email, Key? key}) : super(key: key);
+  const Navbar({required this.username, required this.email, Key? key})
+      : super(key: key);
 
   @override
   State<Navbar> createState() => _NavbarState();
@@ -32,7 +33,7 @@ class _NavbarState extends State<Navbar> {
     _pages = [
       Leaderboard(),
       HomePage(username: widget.username, email: widget.email),
-      Community(),
+      CommunityPage(),
     ];
   }
 

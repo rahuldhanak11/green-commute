@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:transport_app/Navbar.dart';
 import 'package:transport_app/Screens/Login.dart';
+import 'package:transport_app/Screens/Post.dart';
 
 void main() {
   runApp(const MyApp());
