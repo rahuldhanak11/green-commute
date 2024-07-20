@@ -6,7 +6,7 @@ const { uploadOnCloudinary } = require('../utils/cloudinary');
 const router = express.Router();
 
 router.post(
-  '/community',
+  '/',
   fetchUser,
   upload.single('communityImage'),
   async (req, res) => {
@@ -32,7 +32,7 @@ router.post(
 );
 
 router.post(
-  '/community/:id/post',
+  '/:id/post',
   fetchUser,
   upload.single('postImage'),
   async (req, res) => {

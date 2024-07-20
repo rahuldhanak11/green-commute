@@ -63,7 +63,6 @@ const communitySchema = new Schema(
     },
     profileImage: {
       type: String,
-      required: true,
     },
     noOfUsers: {
       type: Number,
