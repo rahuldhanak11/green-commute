@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose');
+const mongoose = require('mongoose');
 
 const userSchema = new Schema(
   {
@@ -17,7 +18,7 @@ const userSchema = new Schema(
       required: true,
     },
     otp: {
-      type: String,
+      type: Number,
     },
     verificationStatus: {
       type: String,
@@ -51,4 +52,6 @@ const userSchema = new Schema(
   { timestamps: true }
 );
 
-export const User = model('User', userSchema);
+const User = model('User', userSchema);
+
+module.exports = { User };

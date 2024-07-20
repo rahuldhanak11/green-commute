@@ -12,7 +12,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/auth", require("./routes/user.routes"));
-// app.use('/api/turf', require('./routes/turf'))
+app.use("/api/trip", require("./routes/trip.routes"));
 // app.use('/api/booking', require('./routes/booking'))
 // app.use('/api/products', require('./routes/products'))
 
