@@ -28,7 +28,7 @@ class _NavbarState extends State<Navbar> {
     super.initState();
     _pages = [
       HomePage(),
-      LeaderBoard(),
+      Leaderboard(),
       Activities(),
       Community(),
     ];
@@ -55,34 +55,22 @@ class _NavbarState extends State<Navbar> {
               GButton(
                 icon: Icons.home_rounded,
                 text: 'Home',
-                textStyle: TextStyle(
-                  fontFamily: 'Sans',
-                  color: Colors.white
-                ),
+                textStyle: TextStyle(fontFamily: 'Sans', color: Colors.white),
               ),
               GButton(
                 icon: Icons.leaderboard,
                 text: 'Leaderboard',
-                textStyle: TextStyle(
-                  fontFamily: 'Sans',
-                  color: Colors.white
-                ),
+                textStyle: TextStyle(fontFamily: 'Sans', color: Colors.white),
               ),
               GButton(
                 icon: Icons.auto_graph,
                 text: 'Activities',
-                textStyle: TextStyle(
-                  fontFamily: 'Sans',
-                  color: Colors.white
-                ),
+                textStyle: TextStyle(fontFamily: 'Sans', color: Colors.white),
               ),
               GButton(
                 icon: Icons.location_city,
                 text: 'Community',
-                textStyle: TextStyle(
-                  fontFamily: 'Sans',
-                  color: Colors.white
-                ),
+                textStyle: TextStyle(fontFamily: 'Sans', color: Colors.white),
               ),
             ],
           ),
