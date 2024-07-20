@@ -32,15 +32,15 @@ router.post(
 );
 
 router.post(
-  '/community/post',
+  '/community/:id/post',
   fetchUser,
   upload.single('postImage'),
   async (req, res) => {
     const { title, description, venue, totalCapacity, timing } = req.body;
-    const id = req.user._id;
+    const id = req.params.id;
     const imagePath = req.file.path;
     const coverImage = await uploadOnCloudinary(imagePath);
-    const community = await Community.findOne({ createdBy: id });
+    const community = await Community.findById(id);
     if (!community) {
       return res.status(400).json({ error: 'Community not exists' });
     }
