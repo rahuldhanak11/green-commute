@@ -12,4 +12,49 @@ function getPlaceSuggestions(input) {
   });
 }
 
-module.exports = { getPlaceSuggestions };
+function getDirections(userSelectionObject) {
+  return client.directions({
+    params: {
+      origin: userSelectionObject.src,
+      destination: userSelectionObject.destn,
+      mode: userSelectionObject.mode,
+      avoid: userSelectionObject.avoid ? '' : userSelectionObject.avoid,
+      alternatives: true,
+      units: 'metric',
+      // arrival_time: Date,
+      traffic_model: 'best_guess',
+      key: apiKey,
+    },
+  });
+}
+
+function getDistanceMatrix(userSelectionObject) {
+  return client.distancematrix({
+    params: {
+      origins: userSelectionObject.src,
+      destinations: userSelectionObject.destn,
+      mode: userSelectionObject.mode,
+      avoid: userSelectionObject.avoid ? '' : userSelectionObject.avoid,
+      alternatives: true,
+      units: 'metric',
+      traffic_model: 'best_guess',
+      key: apiKey,
+    },
+  });
+}
+
+function getGeoCode(locationInput) {
+  return client.geocode({
+    params: {
+      address: locationInput,
+      key: apiKey,
+    },
+  });
+}
+
+module.exports = {
+  getPlaceSuggestions,
+  getDirections,
+  getDistanceMatrix,
+  getGeoCode,
+};
