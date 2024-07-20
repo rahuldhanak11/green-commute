@@ -1,11 +1,11 @@
-const express = require("express");
-const { body, validationResult } = require("express-validator");
-const Event = require("../models/ecent.model");
+const express = require('express');
+// const { body, validationResult } = require('express-validator');
+const {Event} = require('../models/event.model');
 
 const router = express.Router();
 
 // Endpoint to create a new event
-router.post("/events", async (req, res) => {
+router.post('/events', async (req, res) => {
   try {
     const { name, description, venue, totalCapacity, timing } = req.body;
     const newEvent = new Event({
@@ -23,7 +23,7 @@ router.post("/events", async (req, res) => {
 });
 
 // Endpoint to get all events
-router.get("/events", async (req, res) => {
+router.get('/events', async (req, res) => {
   try {
     const events = await Event.find();
     res.status(200).json(events);
