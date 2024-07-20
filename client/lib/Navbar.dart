@@ -6,14 +6,17 @@ import 'package:transport_app/Screens/Home.dart';
 import 'package:transport_app/Screens/Leaderboard.dart';
 
 class Navbar extends StatefulWidget {
-  const Navbar({super.key});
+  final String username;
+  final String email;
+
+  const Navbar({required this.username, required this.email, Key? key}) : super(key: key);
 
   @override
   State<Navbar> createState() => _NavbarState();
 }
 
 class _NavbarState extends State<Navbar> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 1;
 
   void _navigateBottomBar(int index) {
     setState(() {
@@ -27,9 +30,8 @@ class _NavbarState extends State<Navbar> {
   void initState() {
     super.initState();
     _pages = [
-      HomePage(),
       Leaderboard(),
-      Activities(),
+      HomePage(username: widget.username, email: widget.email),
       Community(),
     ];
   }
@@ -41,7 +43,7 @@ class _NavbarState extends State<Navbar> {
       bottomNavigationBar: Container(
         color: Color.fromARGB(255, 37, 31, 50),
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+          padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
           child: GNav(
             backgroundColor: Color.fromARGB(255, 37, 31, 50),
             color: Colors.white,
@@ -53,18 +55,13 @@ class _NavbarState extends State<Navbar> {
             onTabChange: _navigateBottomBar,
             tabs: [
               GButton(
-                icon: Icons.home_rounded,
-                text: 'Home',
-                textStyle: TextStyle(fontFamily: 'Sans', color: Colors.white),
-              ),
-              GButton(
                 icon: Icons.leaderboard,
                 text: 'Leaderboard',
                 textStyle: TextStyle(fontFamily: 'Sans', color: Colors.white),
               ),
               GButton(
-                icon: Icons.auto_graph,
-                text: 'Activities',
+                icon: Icons.dashboard_customize,
+                text: 'Dashboard',
                 textStyle: TextStyle(fontFamily: 'Sans', color: Colors.white),
               ),
               GButton(

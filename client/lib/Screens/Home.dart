@@ -1,95 +1,186 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:http/http.dart' as http;
 import 'package:transport_app/Screens/Map.dart';
+import 'package:transport_app/google-services-api.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final String username;
+  final String email;
+
+  const HomePage({required this.username, required this.email, Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  final GooglePlacesService _placesService = GooglePlacesService();
+  List<String> _srcSuggestions = [];
+  List<String> _destSuggestions = [];
+  final TextEditingController _sourceController = TextEditingController();
+  final TextEditingController _destinationController = TextEditingController();
+
+  void _onTextChanged(String input, bool isSource) async {
+    try {
+      final suggestions = await _placesService.getPlaceSuggestions(input);
+      setState(() {
+        if (isSource) {
+          _srcSuggestions = suggestions;
+        } else {
+          _destSuggestions = suggestions;
+        }
+      });
+        } catch (e) {
+      print('Error fetching suggestions: $e');
+    }
+  }
+
+  void _navigateToMap() {
+    final source = _sourceController.text;
+    final destination = _destinationController.text;
+
+    if (source.isEmpty || destination.isEmpty) {
+      print('Error: Source or Destination is empty');
+      return;
+    }
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MapViewStart(
+          source: source,
+          destination: destination,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 19, 16, 25),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Stack(
           children: [
-            SizedBox(height: 20), // Adjusted top spacing
-            Text(
-              'Hello User',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Sans',
-              ),
-            ),
-            const SizedBox(height: 5),
-            Text(
-              'examplemail@gmail.com', 
-              style: TextStyle(
-                color: Color.fromARGB(255, 157, 157, 157),
-                fontSize: 18,
-                fontFamily: 'Sans',
-              ),
-            ),
-            const SizedBox(height: 40), // Adjusted spacing for better layout
-            Text(
-              'Journey Points',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 22,
-                fontFamily: 'Sans',
-              ),
-            ),
-            const SizedBox(height: 20),
             Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildClickableContainer('Choose Source'),
-                const SizedBox(height: 10),
-                _buildClickableContainer('Choose Destination'),
                 SizedBox(height: 20),
-                GestureDetector(
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=> MapViewStart()));
-                  },
-                  child: Container(
-                    width: double.infinity,
-                    height: 45,
-                    decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 250, 30, 78),
-                      borderRadius: BorderRadius.circular(9),
-                    ),
-                    child: Center(
-                      child: Text('Search',
-                      style: TextStyle(
-                        fontFamily: 'Sans',
-                        fontSize: 18,
-                        color: Colors.white
-                      ),
-                      ),
-                    ),
+                Text(
+                  'Hello ${widget.username}',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Sans',
                   ),
                 ),
-              ],
-            ),
-            const SizedBox(height: 40), // Adjusted spacing before stats section
-            Text(
-              'Stats & Leaderboard',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 22,
-                fontFamily: 'Sans',
-              ),
-            ),
-            const SizedBox(height: 20),
-            Column(
-              children: [
+                const SizedBox(height: 5),
+                Text(
+                  widget.email,
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 157, 157, 157),
+                    fontSize: 18,
+                    fontFamily: 'Sans',
+                  ),
+                ),
+                const SizedBox(height: 40),
+                Text(
+                  'Journey Points',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 22,
+                    fontFamily: 'Sans',
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Column(
+                  children: [
+                    TextField(
+                      controller: _sourceController,
+                      onChanged: (value) {
+                        _onTextChanged(value, true);
+                      },
+                      decoration: InputDecoration(
+                        hintText: 'Choose a Source',
+                        hintStyle: TextStyle(
+                          color: Color.fromARGB(255, 157, 157, 157),
+                          fontSize: 18,
+                          fontFamily: 'Sans',
+                        ),
+                        filled: true,
+                        fillColor: Color.fromARGB(255, 37, 31, 50),
+                        border: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                      ),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontFamily: 'Sans',
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    TextField(
+                      controller: _destinationController,
+                      onChanged: (value) {
+                        _onTextChanged(value, false);
+                      },
+                      decoration: InputDecoration(
+                        hintText: 'Choose a Destination',
+                        hintStyle: TextStyle(
+                          color: Color.fromARGB(255, 157, 157, 157),
+                          fontSize: 18,
+                          fontFamily: 'Sans',
+                        ),
+                        filled: true,
+                        fillColor: Color.fromARGB(255, 37, 31, 50),
+                        border: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                      ),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontFamily: 'Sans',
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    GestureDetector(
+                      onTap: _navigateToMap,
+                      child: Container(
+                        width: double.infinity,
+                        height: 45,
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 250, 30, 78),
+                          borderRadius: BorderRadius.circular(9),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Search',
+                            style: TextStyle(
+                              fontFamily: 'Sans',
+                              fontSize: 18,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 40),
+                Text(
+                  'Stats & Leaderboard',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 22,
+                    fontFamily: 'Sans',
+                  ),
+                ),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -117,7 +208,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             SizedBox(height: 10),
                             Text(
-                              '150 kg CO2', // Replace with dynamic value
+                              '150 kg CO2',
                               style: TextStyle(
                                 color: Color.fromARGB(255, 250, 30, 78),
                                 fontSize: 24,
@@ -153,7 +244,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             SizedBox(height: 10),
                             Text(
-                              '23 / 52', // Replace with dynamic value
+                              '23 / 52',
                               style: TextStyle(
                                 color: Color.fromARGB(255, 250, 30, 78),
                                 fontSize: 24,
@@ -169,34 +260,73 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
+            if (_srcSuggestions.isNotEmpty) _buildSourceSuggestionList(),
+            if (_destSuggestions.isNotEmpty) _buildDestSuggestionList(),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildClickableContainer(String text) {
-    return GestureDetector(
-      onTap: () {
-        // Handle container tap
-      },
+  Widget _buildSourceSuggestionList() {
+    return Positioned(
+      top: 250, // Adjust based on the position of your source text field
+      left: 0,
+      right: 0,
       child: Container(
-        width: double.infinity,
-        height: 60,
-        decoration: BoxDecoration(
-          color: Color.fromARGB(255, 37, 31, 50),
-          borderRadius: BorderRadius.circular(10),
+        height: 200,
+        color: Color.fromARGB(255, 66, 66, 66),
+        child: ListView.builder(
+          itemCount: _srcSuggestions.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              title: Text(
+                _srcSuggestions[index],
+                style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'Sans',
+                ),
+              ),
+              onTap: () {
+                _sourceController.text = _srcSuggestions[index];
+                setState(() {
+                  _srcSuggestions.clear();
+                });
+              },
+            );
+          },
         ),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 0, 0),
-          child: Text(
-            text,
-            style: TextStyle(
-              color: Color.fromARGB(255, 157, 157, 157),
-              fontSize: 18,
-              fontFamily: 'Sans',
-            ),
-          ),
+      ),
+    );
+  }
+
+  Widget _buildDestSuggestionList() {
+    return Positioned(
+      top: 300, // Adjust based on the position of your destination text field
+      left: 0,
+      right: 0,
+      child: Container(
+        height: 200,
+        color: Color.fromARGB(255, 66, 66, 66),
+        child: ListView.builder(
+          itemCount: _destSuggestions.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              title: Text(
+                _destSuggestions[index],
+                style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'Sans',
+                ),
+              ),
+              onTap: () {
+                _destinationController.text = _destSuggestions[index];
+                setState(() {
+                  _destSuggestions.clear();
+                });
+              },
+            );
+          },
         ),
       ),
     );

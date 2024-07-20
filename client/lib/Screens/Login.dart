@@ -22,16 +22,23 @@ class _LoginPageState extends State<LoginPage> {
       _isLoading = true;
     });
 
+    final email = _emailController.text;
+    final password = _passwordController.text;
+
     try {
-      final response = await ApiService.loginUser(
-        _emailController.text,
-        _passwordController.text,
-      );
+      final response = await ApiService.loginUser(email, password);
+      final username = response['fullname'] ?? 'Unknown User';
+      final userEmail = response['email'] ?? 'No email';
 
       if (response['authToken'] != null) {
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => Navbar()),
+          MaterialPageRoute(
+            builder: (context) => Navbar(
+              username: username,
+              email: userEmail,
+            ),
+          ),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(

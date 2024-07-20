@@ -36,6 +36,11 @@ dependencies:
   cupertino_icons: ^1.0.6
   google_nav_bar: ^5.0.6
   http: ^0.13.3
+  google_maps_flutter: ^2.6.1
+  geocoding: ^3.0.0
+  google_maps_utils: ^2.0.0+1
+  google_maps_webservice: ^0.0.20-nullsafety.5
+  
 
 dev_dependencies:
   flutter_test:

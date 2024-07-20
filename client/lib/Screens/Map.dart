@@ -1,190 +1,136 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geocoding/geocoding.dart';
+import 'dart:math' show atan2, cos, pi, sin, sqrt;
 
 class MapViewStart extends StatefulWidget {
-  const MapViewStart({super.key});
+  final String source;
+  final String destination;
+
+  const MapViewStart({required this.source, required this.destination, Key? key}) : super(key: key);
 
   @override
   State<MapViewStart> createState() => _MapViewStartState();
 }
 
 class _MapViewStartState extends State<MapViewStart> {
-  String? _selectedVehicle; 
+  Completer<GoogleMapController> _controller = Completer();
+  LatLng? _sourceLatLng;
+  LatLng? _destinationLatLng;
+  double? _distanceInMeters;
+
+  @override
+  void initState() {
+    super.initState();
+    _getLatLngForLocations();
+  }
+
+  Future<void> _getLatLngForLocations() async {
+    try {
+      final sourceLocation = await locationFromAddress(widget.source);
+      final destinationLocation = await locationFromAddress(widget.destination);
+
+      if (sourceLocation.isNotEmpty && destinationLocation.isNotEmpty) {
+        setState(() {
+          _sourceLatLng = LatLng(sourceLocation[0].latitude, sourceLocation[0].longitude);
+          _destinationLatLng = LatLng(destinationLocation[0].latitude, destinationLocation[0].longitude);
+
+          if (_sourceLatLng != null && _destinationLatLng != null) {
+            _distanceInMeters = _calculateDistance(_sourceLatLng!, _destinationLatLng!);
+          } else {
+            print('Error: One or both locations are null');
+          }
+        });
+      } else {
+        print('Error: Invalid address or location not found');
+      }
+    } catch (e) {
+      print('Error: $e');
+      setState(() {
+        _distanceInMeters = null;
+      });
+    }
+  }
+
+  double _calculateDistance(LatLng source, LatLng destination) {
+    const double R = 6371e3; // Radius of the Earth in meters
+    final double lat1 = source.latitude * pi / 180;
+    final double lat2 = destination.latitude * pi / 180;
+    final double deltaLat = (destination.latitude - source.latitude) * pi / 180;
+    final double deltaLon = (destination.longitude - source.longitude) * pi / 180;
+
+    final double a = sin(deltaLat / 2) * sin(deltaLat / 2) +
+        cos(lat1) * cos(lat2) *
+        sin(deltaLon / 2) * sin(deltaLon / 2);
+    final double c = 2 * atan2(sqrt(a), sqrt(1 - a));
+
+    return R * c; 
+  }
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final mapViewHeight = screenHeight * 0.4; 
+    if (_sourceLatLng == null || _destinationLatLng == null) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text('Map View'),
+          backgroundColor: Color.fromARGB(255, 19, 16, 25),
+        ),
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
 
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 19, 16, 25),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 20), 
-            Text(
-              'Select Your Vehicle',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Sans',
-              ),
-            ),
-            const SizedBox(height: 20), 
-            Container(
-              width: double.infinity,
-              height: mapViewHeight, 
-              decoration: BoxDecoration(
-                color: Color.fromARGB(255, 37, 31, 50),
-                borderRadius: BorderRadius.circular(9.0),
-              ),
-              child: Center(
-                child: Text(
-                  'Map View Here',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontFamily: 'Sans',
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 20), 
-            Expanded(
-              child: Column(
-                children: [
-                  vehicleOption(
-                    icon: Icons.directions_car,
-                    vehicleName: 'Car',
-                    carbonFootprint: '10 kg CO2',
-                    isSelected: _selectedVehicle == 'Car',
-                    onTap: () {
-                      setState(() {
-                        _selectedVehicle = 'Car';
-                      });
-                    },
-                  ),
-                  vehicleOption(
-                    icon: Icons.directions_bike,
-                    vehicleName: 'Bicycle',
-                    carbonFootprint: '0 kg CO2',
-                    isSelected: _selectedVehicle == 'Bicycle',
-                    onTap: () {
-                      setState(() {
-                        _selectedVehicle = 'Bicycle';
-                      });
-                    },
-                  ),
-                  vehicleOption(
-                    icon: Icons.train,
-                    vehicleName: 'Train',
-                    carbonFootprint: '5 kg CO2',
-                    isSelected: _selectedVehicle == 'Train',
-                    onTap: () {
-                      setState(() {
-                        _selectedVehicle = 'Train';
-                      });
-                    },
-                  ),
-                  vehicleOption(
-                    icon: Icons.directions_walk,
-                    vehicleName: 'Walking',
-                    carbonFootprint: '0 kg CO2',
-                    isSelected: _selectedVehicle == 'Walking',
-                    onTap: () {
-                      setState(() {
-                        _selectedVehicle = 'Walking';
-                      });
-                    },
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20), 
-            GestureDetector(
-              onTap: () {
-                print(_selectedVehicle);
-              },
-              child: Container(
-                width: double.infinity,
-                height: 45, 
-                decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 250, 30, 78),
-                  borderRadius: BorderRadius.circular(9),
-                ),
-                child: Center(
-                  child: Text(
-                    'Confirm Selection',
-                    style: TextStyle(
-                      fontFamily: 'Sans',
-                      fontSize: 18,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+      appBar: AppBar(
+        title: Text('Map View'),
+        backgroundColor: Color.fromARGB(255, 19, 16, 25),
       ),
-    );
-  }
-
-  Widget vehicleOption({
-    required IconData icon,
-    required String vehicleName,
-    required String carbonFootprint,
-    required bool isSelected,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.all(16.0),
-        margin: EdgeInsets.symmetric(vertical: 8.0),
-        decoration: BoxDecoration(
-          color: Color.fromARGB(255, 37, 31, 50),
-          borderRadius: BorderRadius.circular(9.0),
-          border: Border.all(
-            color: isSelected
-                ? Color.fromARGB(255, 250, 30, 78) // Pink color
-                : Colors.transparent,
-            width: 2.0,
+      body: Stack(
+        children: [
+          GoogleMap(
+            initialCameraPosition: CameraPosition(
+              target: _sourceLatLng!,
+              zoom: 10,
+            ),
+            markers: {
+              Marker(
+                markerId: MarkerId('source'),
+                position: _sourceLatLng!,
+                infoWindow: InfoWindow(title: 'Source'),
+              ),
+              Marker(
+                markerId: MarkerId('destination'),
+                position: _destinationLatLng!,
+                infoWindow: InfoWindow(title: 'Destination'),
+              ),
+            },
+            polylines: {
+              Polyline(
+                polylineId: PolylineId('route'),
+                points: [_sourceLatLng!, _destinationLatLng!],
+                color: Colors.blue,
+                width: 5,
+              ),
+            },
+            onMapCreated: (GoogleMapController controller) {
+              _controller.complete(controller);
+            },
           ),
-        ),
-        child: Row(
-          children: [
-            Icon(icon, size: 30.0, color: Colors.white),
-            SizedBox(width: 16.0),
-            Expanded(
+          Positioned(
+            bottom: 20,
+            left: 20,
+            child: Container(
+              padding: EdgeInsets.all(10),
+              color: Colors.white,
               child: Text(
-                vehicleName,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18.0,
-                  fontFamily: 'Sans',
-                ),
+                _distanceInMeters == null 
+                  ? 'Distance: Calculating...'
+                  : 'Distance: ${_distanceInMeters?.toStringAsFixed(2)} meters',
+                style: TextStyle(fontSize: 16),
               ),
             ),
-            SizedBox(width: 16.0),
-            Row(
-              children: [
-                Icon(Icons.energy_savings_leaf, size: 20.0, color: Colors.green),
-                SizedBox(width: 4.0),
-                Text(
-                  carbonFootprint,
-                  style: TextStyle(
-                    color: Colors.green,
-                    fontSize: 16.0,
-                    fontFamily: 'Sans',
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
