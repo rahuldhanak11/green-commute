@@ -12,7 +12,6 @@ function getPlaceSuggestions(input) {
       },
     })
     .then((response) => {
-      console.log(response);
       return response;
     })
     .catch((error) =>
@@ -37,7 +36,6 @@ function getDirections(userSelectionObject) {
       },
     })
     .then((response) => {
-      console.log(response);
       return response;
     })
     .catch((error) =>
