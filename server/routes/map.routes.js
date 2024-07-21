@@ -25,7 +25,6 @@ router.post("/distance-matrix", async (req, res) => {
 router.post("/directions", async (req, res) => {
   try {
     const response = await getDirections(req.body);
-    console.log(response);
     res.json(response.data);
   } catch (error) {
     res

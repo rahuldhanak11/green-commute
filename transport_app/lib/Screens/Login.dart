@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:transport_app/Navbar.dart';
 import 'package:transport_app/Screens/Otp.dart';
 import 'package:transport_app/Screens/Signup.dart';
@@ -29,6 +30,8 @@ class _LoginPageState extends State<LoginPage> {
       final response = await ApiService.loginUser(email, password);
       final username = response['fullName'] ?? 'Unknown User';
       final userEmail = response['email'] ?? 'No email';
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('authToken', response['authToken']);
 
       if (response['authToken'] != null) {
         Navigator.pushReplacement(
