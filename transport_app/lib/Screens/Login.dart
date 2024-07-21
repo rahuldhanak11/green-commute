@@ -15,7 +15,7 @@ class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
- bool _isLoading = false;
+  bool _isLoading = false;
 
   void _loginUser() async {
     setState(() {
@@ -27,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
 
     try {
       final response = await ApiService.loginUser(email, password);
-      final username = response['fullname'] ?? 'Unknown User';
+      final username = response['fullName'] ?? 'Unknown User';
       final userEmail = response['email'] ?? 'No email';
 
       if (response['authToken'] != null) {
@@ -88,7 +88,6 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   const SizedBox(height: 30),
-                  
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -110,7 +109,8 @@ class _LoginPageState extends State<LoginPage> {
                           keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
                             border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 10),
                             hintText: 'Enter your Email',
                             hintStyle: TextStyle(
                               fontFamily: 'Sans',
@@ -143,7 +143,8 @@ class _LoginPageState extends State<LoginPage> {
                           obscureText: true,
                           decoration: InputDecoration(
                             border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 10),
                             hintText: 'Enter your Password',
                             hintStyle: TextStyle(
                               fontFamily: 'Sans',
@@ -203,7 +204,8 @@ class _LoginPageState extends State<LoginPage> {
           const SizedBox(height: 10),
           GestureDetector(
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => SignUpPage()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => SignUpPage()));
             },
             child: Text(
               "Don't have an account? Sign up here",
@@ -215,7 +217,6 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
           ),
-          
         ],
       ),
     );

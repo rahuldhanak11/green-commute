@@ -51,7 +51,6 @@ class _HomePageState extends State<HomePage> {
     try {
       final sourceCoords = await _geoCodeService.getGeoCode(source);
       final destCoords = await _geoCodeService.getGeoCode(destination);
-      print(sourceCoords);
       Navigator.push(
         context,
         MaterialPageRoute(

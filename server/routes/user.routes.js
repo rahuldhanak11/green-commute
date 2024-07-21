@@ -92,13 +92,12 @@ router.post(
       if (user.verificationStatus === "PENDING") {
         return res.status(400).json({ error: "OTP Verification Pending" });
       }
-
       const payload = { _id: user._id, name: user.fullName, role: user.role };
       const authToken = jwt.sign(payload, process.env.JWT_SECRET, {
         expiresIn: "1d",
       });
 
-      res.json({ authToken });
+      res.json({ authToken: authToken, fullName: user.fullName, email });
     } catch (error) {
       console.error(error.message);
       res.status(500).send("Server Error");

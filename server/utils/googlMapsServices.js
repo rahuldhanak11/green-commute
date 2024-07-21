@@ -61,7 +61,6 @@ function getDistanceMatrix(userSelectionObject) {
       },
     })
     .then((response) => {
-      console.log(response);
       return response;
     })
     .catch((error) => console.error(`Failed to get Distance ERROR: ${error}`));
