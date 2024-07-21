@@ -13,7 +13,7 @@ Users earn eco-points and rewards for their interaction in the community.
 ### Community Engagement: 
 A platform for sharing tips, routes, and organizing local eco-friendly events, fostering a sense of community.
 ### Leaderboard : 
-users will be ranked on the carbon footprint savings made by them.
+Users will be ranked on the carbon footprint savings made by them.
 
 ## Techstack 
 Flutter, Nodejs, MongoDB
