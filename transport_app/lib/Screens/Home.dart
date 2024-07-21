@@ -105,80 +105,82 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                Column(
-                  children: [
-                    TextField(
-                      controller: _sourceController,
-                      onChanged: (value) {
-                        _onTextChanged(value, true);
-                      },
-                      decoration: InputDecoration(
-                        hintText: 'Choose a Source',
-                        hintStyle: TextStyle(
-                          color: Color.fromARGB(255, 157, 157, 157),
+                Expanded(
+                  child: Column(
+                    children: [
+                      TextField(
+                        controller: _sourceController,
+                        onChanged: (value) {
+                          _onTextChanged(value, true);
+                        },
+                        decoration: InputDecoration(
+                          hintText: 'Choose a Source',
+                          hintStyle: TextStyle(
+                            color: Color.fromARGB(255, 157, 157, 157),
+                            fontSize: 18,
+                            fontFamily: 'Sans',
+                          ),
+                          filled: true,
+                          fillColor: Color.fromARGB(255, 37, 31, 50),
+                          border: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                        ),
+                        style: TextStyle(
+                          color: Colors.white,
                           fontSize: 18,
                           fontFamily: 'Sans',
                         ),
-                        filled: true,
-                        fillColor: Color.fromARGB(255, 37, 31, 50),
-                        border: InputBorder.none,
-                        enabledBorder: InputBorder.none,
-                        focusedBorder: InputBorder.none,
                       ),
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontFamily: 'Sans',
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    TextField(
-                      controller: _destinationController,
-                      onChanged: (value) {
-                        _onTextChanged(value, false);
-                      },
-                      decoration: InputDecoration(
-                        hintText: 'Choose a Destination',
-                        hintStyle: TextStyle(
-                          color: Color.fromARGB(255, 157, 157, 157),
+                      const SizedBox(height: 10),
+                      TextField(
+                        controller: _destinationController,
+                        onChanged: (value) {
+                          _onTextChanged(value, false);
+                        },
+                        decoration: InputDecoration(
+                          hintText: 'Choose a Destination',
+                          hintStyle: TextStyle(
+                            color: Color.fromARGB(255, 157, 157, 157),
+                            fontSize: 18,
+                            fontFamily: 'Sans',
+                          ),
+                          filled: true,
+                          fillColor: Color.fromARGB(255, 37, 31, 50),
+                          border: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                        ),
+                        style: TextStyle(
+                          color: Colors.white,
                           fontSize: 18,
                           fontFamily: 'Sans',
                         ),
-                        filled: true,
-                        fillColor: Color.fromARGB(255, 37, 31, 50),
-                        border: InputBorder.none,
-                        enabledBorder: InputBorder.none,
-                        focusedBorder: InputBorder.none,
                       ),
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontFamily: 'Sans',
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    GestureDetector(
-                      onTap: _navigateToMap,
-                      child: Container(
-                        width: double.infinity,
-                        height: 45,
-                        decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 250, 30, 78),
-                          borderRadius: BorderRadius.circular(9),
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Search',
-                            style: TextStyle(
-                              fontFamily: 'Sans',
-                              fontSize: 18,
-                              color: Colors.white,
+                      const SizedBox(height: 20),
+                      GestureDetector(
+                        onTap: _navigateToMap,
+                        child: Container(
+                          width: double.infinity,
+                          height: 45,
+                          decoration: BoxDecoration(
+                            color: Color.fromARGB(255, 250, 30, 78),
+                            borderRadius: BorderRadius.circular(9),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'Search',
+                              style: TextStyle(
+                                fontFamily: 'Sans',
+                                fontSize: 18,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 40),
                 Text(
@@ -279,7 +281,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildSourceSuggestionList() {
     return Positioned(
-      top: 250,
+      top: 150, // Adjust based on your layout
       left: 0,
       right: 0,
       child: Container(
@@ -311,7 +313,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildDestSuggestionList() {
     return Positioned(
-      top: 300,
+      top: 250, // Adjust based on your layout
       left: 0,
       right: 0,
       child: Container(

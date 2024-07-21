@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 
 class LeaderboardService {
   static const String baseUrl =
-      'http://192.168.1.6:5000'; // Replace with your API URL
+      'http://localhost:5000/'; // Replace with your API URL
 
   Future<List<LeaderboardEntryModel>> fetchOverallLeaderboard() async {
     final response =

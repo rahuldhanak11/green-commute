@@ -33,7 +33,7 @@ class _NavbarState extends State<Navbar> {
     _pages = [
       Leaderboard(),
       HomePage(username: widget.username, email: widget.email),
-      CommunityPage(),
+      Community(),
     ];
   }
 

@@ -14,8 +14,7 @@ class _PostPageState extends State<PostPage> {
 
   Future<void> _pickImage() async {
     try {
-      final pickedFile =
-          await ImagePicker().pickImage(source: ImageSource.gallery);
+      final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
 
       if (pickedFile != null) {
         setState(() {
@@ -23,7 +22,6 @@ class _PostPageState extends State<PostPage> {
         });
       }
     } catch (e) {
-      // Handle the error here, for example by showing a SnackBar or a dialog
       print('Error picking image: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error picking image: $e')),
@@ -32,65 +30,143 @@ class _PostPageState extends State<PostPage> {
   }
 
   void _submitPost() {
-    // Handle post submission logic here
     String title = _titleController.text;
     String description = _descriptionController.text;
-    // You can also use _image for the uploaded image file
 
-    // Clear the form fields
     _titleController.clear();
     _descriptionController.clear();
     setState(() {
       _image = null;
     });
 
-    // Navigate back to the CommunityPage
     Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Post an Event or Message'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: _titleController,
-              decoration: InputDecoration(
-                labelText: 'Title',
-                border: OutlineInputBorder(),
+      backgroundColor: Color.fromARGB(255, 19, 16, 25),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 20),
+              Text(
+                'Create a community',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Sans',
+                ),
               ),
-            ),
-            SizedBox(height: 16),
-            TextField(
-              controller: _descriptionController,
-              decoration: InputDecoration(
-                labelText: 'Description',
-                border: OutlineInputBorder(),
+              SizedBox(height: 20),
+              TextField(
+                controller: _titleController,
+                decoration: InputDecoration(
+                  labelText: 'Title',
+                  labelStyle: TextStyle(
+                    color: Color.fromARGB(255, 157, 157, 157),
+                    fontSize: 18,
+                    fontFamily: 'Sans',
+                  ),
+                  filled: true,
+                  fillColor: Color.fromARGB(255, 37, 31, 50),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(9),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontFamily: 'Sans',
+                ),
               ),
-              maxLines: 4,
-            ),
-            SizedBox(height: 16),
-            _image != null ? Image.file(_image!) : Text('No image selected'),
-            SizedBox(height: 16),
-            Row(
-              children: [
-                ElevatedButton(
+              SizedBox(height: 16),
+              TextField(
+                controller: _descriptionController,
+                decoration: InputDecoration(
+                  labelText: 'Description',
+                  labelStyle: TextStyle(
+                    color: Color.fromARGB(255, 157, 157, 157),
+                    fontSize: 18,
+                    fontFamily: 'Sans',
+                  ),
+                  filled: true,
+                  fillColor: Color.fromARGB(255, 37, 31, 50),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(9),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+                maxLines: 4,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontFamily: 'Sans',
+                ),
+              ),
+              SizedBox(height: 16),
+              _image != null
+                  ? Image.file(_image!)
+                  : Text(
+                      'No image selected',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontFamily: 'Sans',
+                      ),
+                    ),
+              SizedBox(height: 16),
+              SizedBox(
+                width: double.infinity,
+                height: 40,
+                child: ElevatedButton(
                   onPressed: _pickImage,
-                  child: Text('Pick Image'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color.fromARGB(255, 147, 112, 219), // Lavender color
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(9),
+                    ),
+                  ),
+                  child: Text(
+                    'Pick Image',
+                    style: TextStyle(
+                      fontFamily: 'Sans',
+                      fontSize: 18,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
-                SizedBox(width: 16),
-                ElevatedButton(
-                  onPressed: _submitPost,
-                  child: Text('Submit Post'),
+              ),
+              SizedBox(height: 20),
+              GestureDetector(
+                onTap: _submitPost,
+                child: Container(
+                  width: double.infinity,
+                  height: 45,
+                  decoration: BoxDecoration(
+                    color: Color.fromARGB(255, 250, 30, 78),
+                    borderRadius: BorderRadius.circular(9),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Create',
+                      style: TextStyle(
+                        fontFamily: 'Sans',
+                        fontSize: 18,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
                 ),
-              ],
-            ),
-          ],
+              ),
+              SizedBox(height: 20),
+            ],
+          ),
         ),
       ),
     );

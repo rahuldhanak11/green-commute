@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 class GoogleGeoCodeService {
   final String apiUrl =
-      'http://192.168.1.6:5000/api/map/geocode'; // Replace with your server URL
+      'http://localhost:5000/api/map/geocode'; // Replace with your server URL
 
   Future<Map<String, dynamic>> getGeoCode(String address) async {
     final response = await http.post(
@@ -25,7 +25,7 @@ class GoogleGeoCodeService {
 
 class GooglePlacesService {
   final String apiUrl =
-      'http://192.168.1.6:5000/api/map/place-autocomplete'; // Replace with your server URL
+      'http://localhost:5000/api/map/place-autocomplete'; // Replace with your server URL
 
   Future<List<String>> getPlaceSuggestions(String input) async {
     final response = await http.post(

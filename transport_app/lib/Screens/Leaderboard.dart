@@ -57,6 +57,7 @@ class _LeaderboardState extends State<Leaderboard> {
                   style: TextStyle(
                     color: showOverall ? Colors.white : Colors.grey,
                     fontSize: 18,
+                    fontFamily: 'Sans'
                   ),
                 ),
               ),
@@ -67,6 +68,7 @@ class _LeaderboardState extends State<Leaderboard> {
                   style: TextStyle(
                     color: showOverall ? Colors.grey : Colors.white,
                     fontSize: 18,
+                    fontFamily: 'Sans'
                   ),
                 ),
               ),

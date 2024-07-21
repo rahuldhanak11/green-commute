@@ -14,14 +14,40 @@ class OtpScreen extends StatefulWidget {
 
 class _OtpScreenState extends State<OtpScreen> {
   final _otpControllers = List<TextEditingController>.generate(4, (_) => TextEditingController());
+  final _focusNodes = List<FocusNode>.generate(4, (_) => FocusNode());
   bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    for (int i = 0; i < _otpControllers.length; i++) {
+      _otpControllers[i].addListener(() {
+        if (_otpControllers[i].text.length == 1) {
+          if (i < _otpControllers.length - 1) {
+            FocusScope.of(context).requestFocus(_focusNodes[i + 1]);
+          }
+        }
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    for (var controller in _otpControllers) {
+      controller.dispose();
+    }
+    for (var focusNode in _focusNodes) {
+      focusNode.dispose();
+    }
+    super.dispose();
+  }
 
   void _verifyOtp() async {
     setState(() {
       _isLoading = true;
     });
 
-    String   otp = _otpControllers.map((controller) => controller.text).join();
+    String otp = _otpControllers.map((controller) => controller.text).join();
     print('OTP: $otp');
     print('User ID: ${widget.userId}');
 
@@ -52,6 +78,7 @@ class _OtpScreenState extends State<OtpScreen> {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 37, 31, 50),
       body: Column(
@@ -69,7 +96,6 @@ class _OtpScreenState extends State<OtpScreen> {
               padding: const EdgeInsets.all(20.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                // crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     'Verify your Email',
@@ -91,7 +117,7 @@ class _OtpScreenState extends State<OtpScreen> {
                   ),
                   const SizedBox(height: 30),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(16,0,16,0),
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: List.generate(4, (index) => _buildOtpField(index)),
@@ -145,7 +171,9 @@ class _OtpScreenState extends State<OtpScreen> {
       ),
       child: TextField(
         controller: _otpControllers[index],
+        focusNode: _focusNodes[index],
         keyboardType: TextInputType.number,
+        maxLength: 1,
         textAlign: TextAlign.center,
         style: TextStyle(
           color: Colors.white,
@@ -153,6 +181,7 @@ class _OtpScreenState extends State<OtpScreen> {
           fontFamily: 'Sans',
         ),
         decoration: InputDecoration(
+          counterText: '', // Hide the counter text
           border: InputBorder.none,
           contentPadding: EdgeInsets.symmetric(vertical: 12.0),
           hintStyle: TextStyle(
