@@ -1,31 +1,53 @@
-# Green Commute
+# 🌍 Green Commute
 
-Green commute is a platform designed to promote eco-friendly travel options such as biking, walking, and public transportation. The platform provides dynamic route planning, real-time public transport updates, incentives for choosing eco-friendly travel modes, and community features for sharing tips and organizing local eco-friendly events. The goal is to reduce carbon footprints, improve public health, and foster a sense of community around sustainable living.
+**Green Commute** is a platform designed to promote eco-friendly travel options such as biking, walking, and public transportation. The goal is to reduce carbon footprints, improve public health, and foster a sense of community around sustainable living.
 
-## Key Features 
+## ✨ Key Features
 
-### Dynamic Route Planning: 
-Users receive eco-friendly route options optimized for biking, walking, and public transportation, with real-time updates and environmental impact information.
-### Real-Time Public Transport Updates: 
-Integration with public transport APIs to provide live updates on schedules.
-### Incentives for Eco-Friendly Travel: 
-Users earn eco-points and rewards for their interaction in the community.
-### Community Engagement: 
-A platform for sharing tips, routes, and organizing local eco-friendly events, fostering a sense of community.
-### Leaderboard : 
-Users will be ranked on the carbon footprint savings made by them.
+### 🚴 Dynamic Route Planning
+- **Eco-friendly Routes:** Get optimized routes for biking, walking, and public transportation.
+- **Real-Time Updates:** Receive live updates and environmental impact information for your chosen route.
 
-## Techstack 
-Flutter, Nodejs, MongoDB
+### 🚍 Real-Time Public Transport Updates
+- **Live Schedules:** Integration with public transport APIs to provide real-time schedules and updates.
 
-## APIs Used
-Direction API 
+### 🎁 Incentives for Eco-Friendly Travel
+- **Earn Rewards:** Users can earn eco-points and rewards for choosing sustainable travel options.
+- **Leaderboard:** Compete with others by ranking based on your carbon footprint savings.
 
-Distance Matrix API 
+### 🌱 Community Engagement
+- **Share and Connect:** A platform for sharing tips, routes, and organizing local eco-friendly events.
+- **Foster Community:** Build a community around sustainable living.
 
-Geocoding API
+## 🛠 Tech Stack
+- **Frontend:** Flutter
+- **Backend:** Node.js
+- **Database:** MongoDB
 
-Geolocation API
-      
-Places API 
+## 🌐 APIs Used
+- **Direction API**
+- **Distance Matrix API**
+- **Geocoding API**
+- **Geolocation API**
+- **Places API**
+
+## 📚 How to Get Started
+1. **Clone the Repository:**
+   ```bash
+   git clone https://github.com/rahuldhanak11/green-commute.git
+   cd green-commute
+   
+2. **Install Dependencies:**
+   ```bash
+   flutter pub get
+   npm install
+
+3. **Run the App:**
+   ```bash
+   flutter run
+   npm start
+
+
+
+
 
