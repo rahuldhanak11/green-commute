@@ -39,10 +39,13 @@
    
 2. **Install Dependencies:**
    ```bash
-   flutter pub get
-   npm install
+   cd transport_app flutter pub get
+   cd server npm run dev
 
-3. **Run the App:**
+3. **url:**
+   ```bash
+
+5. **Run the App:**
    ```bash
    flutter run
    npm start
