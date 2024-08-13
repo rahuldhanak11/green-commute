@@ -44,6 +44,10 @@
 
 3. **url:**
    ```bash
+   cd transport_app
+   google-services-api.dart - changes base url to your url
+   api-service.dart - changes base url to your url
+   leaderboard-service.dart - changes base url to your url
 
 5. **Run the App:**
    ```bash
