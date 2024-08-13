@@ -2,7 +2,7 @@
 
 **Green Commute** is a platform designed to promote eco-friendly travel options such as biking, walking, and public transportation. The goal is to reduce carbon footprints, improve public health, and foster a sense of community around sustainable living.
 
-## ✨ Key Features
+##  Key Features
 
 ### 🚴 Dynamic Route Planning
 - **Eco-friendly Routes:** Get optimized routes for biking, walking, and public transportation.
@@ -47,6 +47,9 @@
    flutter run
    npm start
 
+## App Preview
+![WhatsApp Image 2024-08-13 at 20 38 05_576c2991](https://github.com/user-attachments/assets/368d8a5b-452d-4139-b58b-7279031518b4)
+![WhatsApp Image 2024-08-13 at 20 38 05_537208c9](https://github.com/user-attachments/assets/f4904ff2-ed15-4643-99a5-49539b920660)
 
 
 
