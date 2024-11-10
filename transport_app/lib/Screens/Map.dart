@@ -125,7 +125,7 @@
 //   }
 
 //   Future<void> _fetchCarbonFootprint(int distanceInMeters) async {
-//     final apiUrl = 'http://192.168.9.9:5000/api/carbon-emission/'; // Replace with your carbon footprint API URL
+//     final apiUrl = 'https://green-commute-9o3s.onrender.com/api/carbon-emission/'; // Replace with your carbon footprint API URL
 //     final response = await http.post(
 //       Uri.parse(apiUrl),
 //       headers: <String, String>{
@@ -300,6 +300,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:transport_app/Screens/RewardNotify.dart';
 import 'package:transport_app/google-services-api.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -307,10 +308,14 @@ import 'dart:convert';
 class MapScreen extends StatefulWidget {
   final LatLng sourceLatLng;
   final LatLng destinationLatLng;
+  final String username;
+  final String email;
 
   const MapScreen({
     required this.sourceLatLng,
     required this.destinationLatLng,
+    required this.username,
+    required this.email,
     Key? key,
   }) : super(key: key);
 
@@ -423,7 +428,7 @@ class _MapScreenState extends State<MapScreen> {
 
   Future<void> _fetchCarbonEmission() async {
     final url =
-        'http://192.168.9.9:5000/api/carbon-emission/'; // Replace with your API URL
+        'https://green-commute-9o3s.onrender.com/api/carbon-emission/'; // Replace with your API URL
     final requestBody = {
       'distance': distance,
       'mode': _selectedMode,
@@ -472,66 +477,85 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color.fromARGB(255, 19, 16, 25),
-      appBar: AppBar(
-        title: Text('Route Map'),
+ @override
+Widget build(BuildContext context) {
+  return Scaffold(
+    backgroundColor: Color.fromARGB(255, 19, 16, 25),
+    appBar: AppBar(
+      title: Text(
+        'Route Map',
+        style: TextStyle(color: Colors.white70),
       ),
-      body: _isLoading
-          ? Center(child: CircularProgressIndicator())
-          : Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          _selectedMode = 'driving';
-                        });
-                        _fetchRouteAndDistanceMatrix();
-                      },
-                      child: Text('Driving'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: _selectedMode == 'driving'
-                            ? Colors.blue
-                            : Colors.grey,
-                      ),
+      backgroundColor: Color.fromARGB(255, 19, 16, 25),
+      foregroundColor: Colors.white70,
+    ),
+    body: _isLoading
+        ? Center(child: CircularProgressIndicator())
+        : Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        _selectedMode = 'driving';
+                      });
+                      _fetchRouteAndDistanceMatrix();
+                    },
+                    child: Text(
+                      'Driving',
+                      style: TextStyle(color: Colors.white),
                     ),
-                    ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          _selectedMode = 'walking';
-                        });
-                        _fetchRouteAndDistanceMatrix();
-                      },
-                      child: Text('Walking'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: _selectedMode == 'walking'
-                            ? Colors.green
-                            : Colors.grey,
-                      ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: _selectedMode == 'driving'
+                          ? Color.fromARGB(255, 250, 30, 78)
+                          : Color.fromARGB(255, 19, 16, 25),
                     ),
-                    ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          _selectedMode = 'transit';
-                        });
-                        _fetchRouteAndDistanceMatrix();
-                      },
-                      child: Text('Transit'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: _selectedMode == 'transit'
-                            ? Colors.red
-                            : Colors.grey,
-                      ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        _selectedMode = 'walking';
+                      });
+                      _fetchRouteAndDistanceMatrix();
+                    },
+                    child: Text(
+                      'Walking',
+                      style: TextStyle(color: Colors.white),
                     ),
-                  ],
-                ),
-                Container(
-                  height: 300,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: _selectedMode == 'walking'
+                          ? Color.fromARGB(255, 250, 30, 78)
+                          : Color.fromARGB(255, 19, 16, 25),
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        _selectedMode = 'transit';
+                      });
+                      _fetchRouteAndDistanceMatrix();
+                    },
+                    child: Text(
+                      'Transit',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: _selectedMode == 'transit'
+                          ? Color.fromARGB(255, 250, 30, 78)
+                          : Color.fromARGB(255, 19, 16, 25),
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                margin: EdgeInsets.all(19.0),
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(20)),
+                height: 300,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20.0),
                   child: GoogleMap(
                     onMapCreated: (controller) {
                       _mapController = controller;
@@ -586,27 +610,107 @@ class _MapScreenState extends State<MapScreen> {
                     },
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Card(
-                    elevation: 4,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Distance: $distance'),
-                          Text('Duration: $duration'),
-                          if (_selectedMode == 'transit') Text('Fare: $fare'),
-                          Text(
-                              'Carbon Emission: $carbonEmission gm'), // Display carbon emission
-                        ],
-                      ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(Icons.map_outlined, color: Colors.blueAccent),
+                            SizedBox(width: 10),
+                            Text(
+                              'Distance: $distance',
+                              style: TextStyle(
+                                fontFamily: 'Sans',
+                                fontSize: 18,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 10),
+                        Row(
+                          children: [
+                            Icon(Icons.timer_outlined, color: Colors.green),
+                            SizedBox(width: 10),
+                            Text(
+                              'Duration: $duration',
+                              style: TextStyle(
+                                fontFamily: 'Sans',
+                                fontSize: 18,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 10),
+                        if (_selectedMode == 'transit')
+                          Row(
+                            children: [
+                              Icon(Icons.attach_money_outlined,
+                                  color: Colors.red),
+                              SizedBox(width: 10),
+                              Text(
+                                'Fare: $fare',
+                                style: TextStyle(
+                                  fontFamily: 'Sans',
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ],
+                          ),
+                        if (_selectedMode == 'transit') SizedBox(height: 10),
+                        Row(
+                          children: [
+                            Icon(Icons.eco_outlined, color: Colors.brown),
+                            SizedBox(width: 10),
+                            Text(
+                              'Carbon Emission: $carbonEmission gm',
+                              style: TextStyle(
+                                fontFamily: 'Sans',
+                                fontSize: 18,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                 ),
-              ],
-            ),
-    );
-  }
+              ),
+              SizedBox(height: 10), // Add spacing before the button
+              Container(
+                margin: EdgeInsets.only(left: 20, right: 20),
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => RewardNotify(username: widget.username, email:widget.email)),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color.fromARGB(255, 250, 30, 78), // Button color
+                    padding: EdgeInsets.symmetric(vertical: 15.0), // Control button height
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0), // Less rounded corners
+                    ),
+                    minimumSize: Size(double.infinity, 50), // Make button full width and 50px tall
+                  ),
+                  child: Text(
+                    'Select Journey Mode',
+                    style: TextStyle(fontSize: 18, color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
+  );
+}
 }

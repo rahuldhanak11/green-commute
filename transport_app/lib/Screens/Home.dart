@@ -57,6 +57,8 @@ class _HomePageState extends State<HomePage> {
           builder: (context) => MapScreen(
             sourceLatLng: LatLng(sourceCoords['lat'], sourceCoords['lng']),
             destinationLatLng: LatLng(destCoords['lat'], destCoords['lng']),
+            username: widget.username,
+            email: widget.email,
           ),
         ),
       );
@@ -66,230 +68,273 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
-Widget build(BuildContext context) {
-  return Scaffold(
-    backgroundColor: Color.fromARGB(255, 19, 16, 25),
-    resizeToAvoidBottomInset: true, // Ensure the page resizes when the keyboard is up
-    body: SafeArea(
-      child: Stack(
-        children: [
-          SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 20),
-                  Text(
-                    'Hello ${widget.username}',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Sans',
-                    ),
-                  ),
-                  const SizedBox(height: 5),
-                  Text(
-                    widget.email,
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 157, 157, 157),
-                      fontSize: 18,
-                      fontFamily: 'Sans',
-                    ),
-                  ),
-                  const SizedBox(height: 40),
-                  Text(
-                    'Journey Points',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 22,
-                      fontFamily: 'Sans',
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  TextField(
-                    controller: _sourceController,
-                    onChanged: (value) {
-                      _onTextChanged(value, true);
-                    },
-                    decoration: InputDecoration(
-                      hintText: 'Choose a Source',
-                      hintStyle: TextStyle(
-                        color: Color.fromARGB(255, 157, 157, 157),
-                        fontSize: 18,
-                        fontFamily: 'Sans',
-                      ),
-                      filled: true,
-                      fillColor: Color.fromARGB(255, 37, 31, 50),
-                      border: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                    ),
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontFamily: 'Sans',
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  TextField(
-                    controller: _destinationController,
-                    onChanged: (value) {
-                      _onTextChanged(value, false);
-                    },
-                    decoration: InputDecoration(
-                      hintText: 'Choose a Destination',
-                      hintStyle: TextStyle(
-                        color: Color.fromARGB(255, 157, 157, 157),
-                        fontSize: 18,
-                        fontFamily: 'Sans',
-                      ),
-                      filled: true,
-                      fillColor: Color.fromARGB(255, 37, 31, 50),
-                      border: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                    ),
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontFamily: 'Sans',
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  GestureDetector(
-                    onTap: _navigateToMap,
-                    child: Container(
-                      width: double.infinity,
-                      height: 45,
-                      decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 250, 30, 78),
-                        borderRadius: BorderRadius.circular(9),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Search',
-                          style: TextStyle(
-                            fontFamily: 'Sans',
-                            fontSize: 18,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 30),
-                  Text(
-                    'Stats & Leaderboard',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 22,
-                      fontFamily: 'Sans',
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Color.fromARGB(255, 19, 16, 25),
+      resizeToAvoidBottomInset:
+          true, // Ensure the page resizes when the keyboard is up
+      body: GestureDetector(
+        onTap: () {
+          // Close suggestion boxes if tapping outside
+          setState(() {
+            _srcSuggestions.clear();
+            _destSuggestions.clear();
+          });
+        },
+        child: SafeArea(
+          child: Stack(
+            children: [
+              SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.40,
-                        height: MediaQuery.of(context).size.width * 0.40,
-                        decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 37, 31, 50),
-                          borderRadius: BorderRadius.circular(9),
+                      SizedBox(height: 20),
+                      Text(
+                        'Hello ${widget.username}',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Sans',
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Carbon Footprint Saved',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: MediaQuery.of(context).size.width * 0.05,
-                                  fontFamily: 'Sans',
-                                  fontWeight: FontWeight.bold,
-                                ),
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        widget.email,
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 157, 157, 157),
+                          fontSize: 18,
+                          fontFamily: 'Sans',
+                        ),
+                      ),
+                      const SizedBox(height: 40),
+                      Text(
+                        'Journey Points',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 22,
+                          fontFamily: 'Sans',
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      TextField(
+                        controller: _sourceController,
+                        onChanged: (value) {
+                          _onTextChanged(value, true);
+                        },
+                        decoration: InputDecoration(
+                          hintText: 'Choose a Source',
+                          hintStyle: TextStyle(
+                            color: Color.fromARGB(255, 157, 157, 157),
+                            fontSize: 18,
+                            fontFamily: 'Sans',
+                          ),
+                          filled: true,
+                          fillColor: Color.fromARGB(255, 37, 31, 50),
+                          border: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          suffixIcon: _sourceController.text.isNotEmpty
+                              ? IconButton(
+                                  icon: Icon(Icons.clear, color: Colors.white),
+                                  onPressed: () {
+                                    _sourceController.clear();
+                                    setState(() {
+                                      _srcSuggestions.clear();
+                                    });
+                                  },
+                                )
+                              : null,
+                        ),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontFamily: 'Sans',
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      TextField(
+                        controller: _destinationController,
+                        onChanged: (value) {
+                          _onTextChanged(value, false);
+                        },
+                        decoration: InputDecoration(
+                          hintText: 'Choose a Destination',
+                          hintStyle: TextStyle(
+                            color: Color.fromARGB(255, 157, 157, 157),
+                            fontSize: 18,
+                            fontFamily: 'Sans',
+                          ),
+                          filled: true,
+                          fillColor: Color.fromARGB(255, 37, 31, 50),
+                          border: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          suffixIcon: _destinationController.text.isNotEmpty
+                              ? IconButton(
+                                  icon: Icon(Icons.clear, color: Colors.white),
+                                  onPressed: () {
+                                    _destinationController.clear();
+                                    setState(() {
+                                      _destSuggestions.clear();
+                                    });
+                                  },
+                                )
+                              : null,
+                        ),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontFamily: 'Sans',
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      GestureDetector(
+                        onTap: _navigateToMap,
+                        child: Container(
+                          width: double.infinity,
+                          height: 45,
+                          decoration: BoxDecoration(
+                            color: Color.fromARGB(255, 250, 30, 78),
+                            borderRadius: BorderRadius.circular(9),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'Search',
+                              style: TextStyle(
+                                fontFamily: 'Sans',
+                                fontSize: 18,
+                                color: Colors.white,
                               ),
-                              SizedBox(height: 10),
-                              Text(
-                                '150 kg CO2',
-                                style: TextStyle(
-                                  color: Color.fromARGB(255, 250, 30, 78),
-                                  fontSize: MediaQuery.of(context).size.width * 0.045,
-                                  fontFamily: 'Sans',
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
                         ),
                       ),
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.40,
-                        height: MediaQuery.of(context).size.width * 0.40,
-                        decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 37, 31, 50),
-                          borderRadius: BorderRadius.circular(9),
+                      const SizedBox(height: 30),
+                      Text(
+                        'Stats & Leaderboard',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 22,
+                          fontFamily: 'Sans',
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Badges Achieved',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: MediaQuery.of(context).size.width * 0.05,
-                                  fontFamily: 'Sans',
-                                  fontWeight: FontWeight.bold,
-                                ),
+                      ),
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.40,
+                            height: MediaQuery.of(context).size.width * 0.40,
+                            decoration: BoxDecoration(
+                              color: Color.fromARGB(255, 37, 31, 50),
+                              borderRadius: BorderRadius.circular(9),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Carbon Footprint Saved',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize:
+                                          MediaQuery.of(context).size.width *
+                                              0.05,
+                                      fontFamily: 'Sans',
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    '150 kg CO2',
+                                    style: TextStyle(
+                                      color: Color.fromARGB(255, 250, 30, 78),
+                                      fontSize:
+                                          MediaQuery.of(context).size.width *
+                                              0.045,
+                                      fontFamily: 'Sans',
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              SizedBox(height: 10),
-                              Text(
-                                '23 / 52',
-                                style: TextStyle(
-                                  color: Color.fromARGB(255, 250, 30, 78),
-                                  fontSize: MediaQuery.of(context).size.width * 0.045,
-                                  fontFamily: 'Sans',
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
-                        ),
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.40,
+                            height: MediaQuery.of(context).size.width * 0.40,
+                            decoration: BoxDecoration(
+                              color: Color.fromARGB(255, 37, 31, 50),
+                              borderRadius: BorderRadius.circular(9),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Badges Achieved',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize:
+                                          MediaQuery.of(context).size.width *
+                                              0.05,
+                                      fontFamily: 'Sans',
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    '23 / 52',
+                                    style: TextStyle(
+                                      color: Color.fromARGB(255, 250, 30, 78),
+                                      fontSize:
+                                          MediaQuery.of(context).size.width *
+                                              0.045,
+                                      fontFamily: 'Sans',
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
+                ),
               ),
-            ),
+              // Suggestion lists for source and destination
+              if (_srcSuggestions.isNotEmpty) _buildSourceSuggestionList(),
+              if (_destSuggestions.isNotEmpty) _buildDestSuggestionList(),
+            ],
           ),
-          // Suggestion lists for source and destination
-          if (_srcSuggestions.isNotEmpty) _buildSourceSuggestionList(),
-          if (_destSuggestions.isNotEmpty) _buildDestSuggestionList(),
-        ],
+        ),
       ),
-    ),
-  );
-}
-
-
+    );
+  }
 
   Widget _buildSourceSuggestionList() {
     return Positioned(
-      top: MediaQuery.of(context).size.height * 0.28, // Adjust based on your layout
+      top: MediaQuery.of(context).size.height *
+          0.3, // Adjust based on your layout
       left: 0,
       right: 0,
       child: Container(
-        margin: EdgeInsets.only(left: 12, right: 12),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+           color: Color.fromARGB(255, 66, 66, 66),
+        ),
+        margin: EdgeInsets.only(left: 19, right: 19),
         height: 200,
-        color: Color.fromARGB(255, 66, 66, 66),
+       
         child: ListView.builder(
           itemCount: _srcSuggestions.length,
           itemBuilder: (context, index) {
@@ -316,11 +361,12 @@ Widget build(BuildContext context) {
 
   Widget _buildDestSuggestionList() {
     return Positioned(
-      top: MediaQuery.of(context).size.height * 0.34, // Adjust based on your layout
+      top: MediaQuery.of(context).size.height *
+          0.4, // Adjust based on your layout
       left: 0,
       right: 0,
       child: Container(
-        margin: EdgeInsets.only(left: 12, right: 12),
+        margin: EdgeInsets.only(left: 19, right: 19),
         height: 200,
         color: Color.fromARGB(255, 66, 66, 66),
         child: ListView.builder(

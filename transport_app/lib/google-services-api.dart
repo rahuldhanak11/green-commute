@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 class GoogleGeoCodeService {
   final String apiUrl =
-      'http://192.168.0.109:5000/api/map/geocode'; // Replace with your server URL
+      'https://green-commute-9o3s.onrender.com/api/map/geocode'; // Replace with your server URL
 
   Future<Map<String, dynamic>> getGeoCode(String address) async {
     final response = await http.post(
@@ -25,7 +25,7 @@ class GoogleGeoCodeService {
 
 class GooglePlacesService {
   final String apiUrl =
-      'http://192.168.0.109:5000/api/map/place-autocomplete'; // Replace with your server URL
+      'https://green-commute-9o3s.onrender.com/api/map/place-autocomplete'; // Replace with your server URL
 
   Future<List<String>> getPlaceSuggestions(String input) async {
     final response = await http.post(
@@ -46,7 +46,7 @@ class GooglePlacesService {
 
 class GoogleDistanceMatrixService {
   final String apiUrl =
-      'http://192.168.0.109:5000/api/map/distance-matrix'; // Replace with your server URL
+      'https://green-commute-9o3s.onrender.com/api/map/distance-matrix'; // Replace with your server URL
 
   Future<Map<String, dynamic>> getDistanceMatrix(
       Map<String, dynamic> requestBody) async {
@@ -66,7 +66,7 @@ class GoogleDistanceMatrixService {
 
 class GoogleReverseGeoCodeService {
   final String apiUrl =
-      'http://192.168.0.109:5000/api/map/reverse-geocode'; // Replace with your server URL
+      'https://green-commute-9o3s.onrender.com/api/map/reverse-geocode'; // Replace with your server URL
 
   Future<Map<String, dynamic>> getReverseGeoCode(
       Map<String, dynamic> requestBody) async {
@@ -86,7 +86,7 @@ class GoogleReverseGeoCodeService {
 
 class GoogleDirectionService {
   final String apiUrl =
-      'http://192.168.0.109:5000/api/map/directions'; // Replace with your server URL
+      'https://green-commute-9o3s.onrender.com/api/map/directions'; // Replace with your server URL
 
   List<LatLng> decodePolyline(String encoded) {
     final List<LatLng> poly = [];

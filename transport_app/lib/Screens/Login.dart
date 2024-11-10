@@ -196,11 +196,13 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 child: _isLoading
-                    ? CircularProgressIndicator(color: Colors.white)
+                    ? CircularProgressIndicator(color: Colors.white,
+                    strokeWidth: 10,
+                    )
                     : Text(
                         'Login',
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 16,
                           color: Colors.white,
                           fontFamily: 'Sans',
                           fontWeight: FontWeight.w500,

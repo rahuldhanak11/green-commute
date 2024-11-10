@@ -81,82 +81,84 @@ class _OtpScreenState extends State<OtpScreen> {
 
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 37, 31, 50),
-      body: Column(
-        children: [
-          Container(
-            height: screenHeight * 0.7,
-            decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 19, 16, 25),
-              borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(30.0),
-                bottomRight: Radius.circular(30.0),
-              ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Verify your Email',
-                    style: TextStyle(
-                      color: const Color.fromARGB(255, 250, 30, 78),
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Sans',
-                    ),
-                  ),
-                  const SizedBox(height: 30),
-                  Text(
-                    'Enter the OTP sent to your email',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontFamily: 'Sans',
-                    ),
-                  ),
-                  const SizedBox(height: 30),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: List.generate(4, (index) => _buildOtpField(index)),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: 50),
-          Container(
-            width: double.infinity,
-            height: 50,
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: ElevatedButton(
-              onPressed: () {
-                _isLoading ? null : _verifyOtp();
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color.fromARGB(255, 250, 30, 78),
-                padding: const EdgeInsets.symmetric(vertical: 15.0),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              height: screenHeight * 0.7,
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 19, 16, 25),
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(30.0),
+                  bottomRight: Radius.circular(30.0),
                 ),
               ),
-              child: _isLoading
-                  ? CircularProgressIndicator(color: Colors.white)
-                  : Text(
-                      'Verify OTP',
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Verify your Email',
                       style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.white,
+                        color: const Color.fromARGB(255, 250, 30, 78),
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
                         fontFamily: 'Sans',
-                        fontWeight: FontWeight.w500,
                       ),
                     ),
+                    const SizedBox(height: 30),
+                    Text(
+                      'Enter the OTP sent to your email',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontFamily: 'Sans',
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: List.generate(4, (index) => _buildOtpField(index)),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ),
-        ],
+            const SizedBox(height: 50),
+            Container(
+              width: double.infinity,
+              height: 50,
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  _isLoading ? null : _verifyOtp();
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color.fromARGB(255, 250, 30, 78),
+                  padding: const EdgeInsets.symmetric(vertical: 15.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                ),
+                child: _isLoading
+                    ? CircularProgressIndicator(color: Colors.white)
+                    : Text(
+                        'Verify OTP',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.white,
+                          fontFamily: 'Sans',
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
