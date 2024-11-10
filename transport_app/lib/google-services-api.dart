@@ -121,25 +121,38 @@ class GoogleDirectionService {
     return poly;
   }
 
-  Future<List<LatLng>> getDirections(Map<String, dynamic> requestBody) async {
+  Future<List<List<LatLng>>> getDirections(
+      Map<String, dynamic> requestBody) async {
     final response = await http.post(
       Uri.parse(apiUrl),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(requestBody),
     );
+
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
 
-      final List<LatLng> routeCoordinates = [];
+      // Create a list to hold multiple routes
+      final List<List<LatLng>> routesCoordinates = [];
 
       if (data['status'] == 'OK') {
-        final steps = data['routes'][0]['legs'][0]['steps'];
-        for (var step in steps) {
-          final polyline = step['polyline']['points'];
-          routeCoordinates.addAll(decodePolyline(polyline));
+        final routes = data['routes'];
+        for (var route in routes) {
+          final List<LatLng> routeCoordinates = [];
+          final steps = route['legs'][0]['steps'];
+
+          // Decode and add the coordinates for each step
+          for (var step in steps) {
+            final polyline = step['polyline']['points'];
+            routeCoordinates.addAll(decodePolyline(polyline));
+          }
+
+          // Add the current route's coordinates to the list of all routes
+          routesCoordinates.add(routeCoordinates);
         }
       }
-      return routeCoordinates;
+
+      return routesCoordinates;
     } else {
       throw Exception('Failed to load directions');
     }
