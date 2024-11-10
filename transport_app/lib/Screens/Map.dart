@@ -125,7 +125,7 @@
 //   }
 
 //   Future<void> _fetchCarbonFootprint(int distanceInMeters) async {
-//     final apiUrl = 'http://192.168.1.6:5000/api/carbon-emission/'; // Replace with your carbon footprint API URL
+//     final apiUrl = 'http://192.168.9.9:5000/api/carbon-emission/'; // Replace with your carbon footprint API URL
 //     final response = await http.post(
 //       Uri.parse(apiUrl),
 //       headers: <String, String>{
@@ -423,7 +423,7 @@ class _MapScreenState extends State<MapScreen> {
 
   Future<void> _fetchCarbonEmission() async {
     final url =
-        'http://192.168.1.6:5000/api/carbon-emission/'; // Replace with your API URL
+        'http://192.168.9.9:5000/api/carbon-emission/'; // Replace with your API URL
     final requestBody = {
       'distance': distance,
       'mode': _selectedMode,

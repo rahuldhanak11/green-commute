@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 
 class ApiService {
   static const String baseUrl =
-      "http://localhost:5000"; // Replace with your API URL
+      "http://192.168.0.109:5000"; // Replace with your API URL
 
   static Future<Map<String, dynamic>> loginUser(
       String email, String password) async {

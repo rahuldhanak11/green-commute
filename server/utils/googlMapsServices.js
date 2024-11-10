@@ -1,4 +1,4 @@
-const { Client } = require("@googlemaps/google-maps-services-js");
+const { Client } = require('@googlemaps/google-maps-services-js');
 const client = new Client({});
 
 const apiKey = process.env.GOOGLE_MAPS_API_KEY;
@@ -28,10 +28,10 @@ function getDirections(userSelectionObject) {
         mode: userSelectionObject.mode,
         avoid: userSelectionObject.avoid,
         alternatives: true,
-        departure_time: "now",
-        units: "metric",
+        departure_time: 'now',
+        units: 'metric',
         // arrival_time: Date,
-        traffic_model: "best_guess",
+        traffic_model: 'best_guess',
         key: apiKey,
       },
     })
@@ -52,9 +52,9 @@ function getDistanceMatrix(userSelectionObject) {
         mode: userSelectionObject.mode,
         avoid: userSelectionObject.avoid,
         alternatives: true,
-        departure_time: "now",
-        units: "metric",
-        traffic_model: "best_guess",
+        departure_time: 'now',
+        units: 'metric',
+        traffic_model: 'best_guess',
         key: apiKey,
       },
     })
@@ -73,7 +73,6 @@ function getGeoCode(locationInput) {
       },
     })
     .then((response) => {
-      console.log(response);
       return response;
     })
     .catch((error) => console.error(`Failed to get Geocode ERROR: ${error}`));
@@ -91,7 +90,7 @@ function getReverseGeoCode(latlng) {
       return response;
     })
     .catch((error) =>
-      console.error("Failed to get Reverse Geocode ERROR: ${error}")
+      console.error('Failed to get Reverse Geocode ERROR: ${error}')
     );
 }
 
