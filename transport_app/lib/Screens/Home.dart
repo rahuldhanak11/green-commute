@@ -66,225 +66,228 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color.fromARGB(255, 19, 16, 25),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Stack(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 20),
-                Text(
-                  'Hello ${widget.username}',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Sans',
+Widget build(BuildContext context) {
+  return Scaffold(
+    backgroundColor: Color.fromARGB(255, 19, 16, 25),
+    resizeToAvoidBottomInset: true, // Ensure the page resizes when the keyboard is up
+    body: SafeArea(
+      child: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 20),
+                  Text(
+                    'Hello ${widget.username}',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Sans',
+                    ),
                   ),
-                ),
-                const SizedBox(height: 5),
-                Text(
-                  widget.email,
-                  style: TextStyle(
-                    color: Color.fromARGB(255, 157, 157, 157),
-                    fontSize: 18,
-                    fontFamily: 'Sans',
+                  const SizedBox(height: 5),
+                  Text(
+                    widget.email,
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 157, 157, 157),
+                      fontSize: 18,
+                      fontFamily: 'Sans',
+                    ),
                   ),
-                ),
-                const SizedBox(height: 40),
-                Text(
-                  'Journey Points',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontFamily: 'Sans',
+                  const SizedBox(height: 40),
+                  Text(
+                    'Journey Points',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 22,
+                      fontFamily: 'Sans',
+                    ),
                   ),
-                ),
-                const SizedBox(height: 20),
-                Expanded(
-                  child: Column(
+                  const SizedBox(height: 20),
+                  TextField(
+                    controller: _sourceController,
+                    onChanged: (value) {
+                      _onTextChanged(value, true);
+                    },
+                    decoration: InputDecoration(
+                      hintText: 'Choose a Source',
+                      hintStyle: TextStyle(
+                        color: Color.fromARGB(255, 157, 157, 157),
+                        fontSize: 18,
+                        fontFamily: 'Sans',
+                      ),
+                      filled: true,
+                      fillColor: Color.fromARGB(255, 37, 31, 50),
+                      border: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                    ),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontFamily: 'Sans',
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  TextField(
+                    controller: _destinationController,
+                    onChanged: (value) {
+                      _onTextChanged(value, false);
+                    },
+                    decoration: InputDecoration(
+                      hintText: 'Choose a Destination',
+                      hintStyle: TextStyle(
+                        color: Color.fromARGB(255, 157, 157, 157),
+                        fontSize: 18,
+                        fontFamily: 'Sans',
+                      ),
+                      filled: true,
+                      fillColor: Color.fromARGB(255, 37, 31, 50),
+                      border: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                    ),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontFamily: 'Sans',
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  GestureDetector(
+                    onTap: _navigateToMap,
+                    child: Container(
+                      width: double.infinity,
+                      height: 45,
+                      decoration: BoxDecoration(
+                        color: Color.fromARGB(255, 250, 30, 78),
+                        borderRadius: BorderRadius.circular(9),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Search',
+                          style: TextStyle(
+                            fontFamily: 'Sans',
+                            fontSize: 18,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  Text(
+                    'Stats & Leaderboard',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 22,
+                      fontFamily: 'Sans',
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      TextField(
-                        controller: _sourceController,
-                        onChanged: (value) {
-                          _onTextChanged(value, true);
-                        },
-                        decoration: InputDecoration(
-                          hintText: 'Choose a Source',
-                          hintStyle: TextStyle(
-                            color: Color.fromARGB(255, 157, 157, 157),
-                            fontSize: 18,
-                            fontFamily: 'Sans',
-                          ),
-                          filled: true,
-                          fillColor: Color.fromARGB(255, 37, 31, 50),
-                          border: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.40,
+                        height: MediaQuery.of(context).size.width * 0.40,
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 37, 31, 50),
+                          borderRadius: BorderRadius.circular(9),
                         ),
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontFamily: 'Sans',
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      TextField(
-                        controller: _destinationController,
-                        onChanged: (value) {
-                          _onTextChanged(value, false);
-                        },
-                        decoration: InputDecoration(
-                          hintText: 'Choose a Destination',
-                          hintStyle: TextStyle(
-                            color: Color.fromARGB(255, 157, 157, 157),
-                            fontSize: 18,
-                            fontFamily: 'Sans',
-                          ),
-                          filled: true,
-                          fillColor: Color.fromARGB(255, 37, 31, 50),
-                          border: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                        ),
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontFamily: 'Sans',
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      GestureDetector(
-                        onTap: _navigateToMap,
-                        child: Container(
-                          width: double.infinity,
-                          height: 45,
-                          decoration: BoxDecoration(
-                            color: Color.fromARGB(255, 250, 30, 78),
-                            borderRadius: BorderRadius.circular(9),
-                          ),
-                          child: Center(
-                            child: Text(
-                              'Search',
-                              style: TextStyle(
-                                fontFamily: 'Sans',
-                                fontSize: 18,
-                                color: Colors.white,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Carbon Footprint Saved',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: MediaQuery.of(context).size.width * 0.05,
+                                  fontFamily: 'Sans',
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
+                              SizedBox(height: 10),
+                              Text(
+                                '150 kg CO2',
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 250, 30, 78),
+                                  fontSize: MediaQuery.of(context).size.width * 0.045,
+                                  fontFamily: 'Sans',
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.40,
+                        height: MediaQuery.of(context).size.width * 0.40,
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 37, 31, 50),
+                          borderRadius: BorderRadius.circular(9),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Badges Achieved',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: MediaQuery.of(context).size.width * 0.05,
+                                  fontFamily: 'Sans',
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                              Text(
+                                '23 / 52',
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 250, 30, 78),
+                                  fontSize: MediaQuery.of(context).size.width * 0.045,
+                                  fontFamily: 'Sans',
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
                     ],
                   ),
-                ),
-                const SizedBox(height: 40),
-                Text(
-                  'Stats & Leaderboard',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontFamily: 'Sans',
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      width: 165,
-                      height: 165,
-                      decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 37, 31, 50),
-                        borderRadius: BorderRadius.circular(9),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Carbon Footprint Saved',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontFamily: 'Sans',
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              '150 kg CO2',
-                              style: TextStyle(
-                                color: Color.fromARGB(255, 250, 30, 78),
-                                fontSize: 24,
-                                fontFamily: 'Sans',
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Container(
-                      width: 165,
-                      height: 165,
-                      decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 37, 31, 50),
-                        borderRadius: BorderRadius.circular(9),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Badges Achieved',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontFamily: 'Sans',
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              '23 / 52',
-                              style: TextStyle(
-                                color: Color.fromARGB(255, 250, 30, 78),
-                                fontSize: 24,
-                                fontFamily: 'Sans',
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+                ],
+              ),
             ),
-            if (_srcSuggestions.isNotEmpty) _buildSourceSuggestionList(),
-            if (_destSuggestions.isNotEmpty) _buildDestSuggestionList(),
-          ],
-        ),
+          ),
+          // Suggestion lists for source and destination
+          if (_srcSuggestions.isNotEmpty) _buildSourceSuggestionList(),
+          if (_destSuggestions.isNotEmpty) _buildDestSuggestionList(),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
+
+
 
   Widget _buildSourceSuggestionList() {
     return Positioned(
-      top: 150, // Adjust based on your layout
+      top: MediaQuery.of(context).size.height * 0.28, // Adjust based on your layout
       left: 0,
       right: 0,
       child: Container(
+        margin: EdgeInsets.only(left: 12, right: 12),
         height: 200,
         color: Color.fromARGB(255, 66, 66, 66),
         child: ListView.builder(
@@ -313,10 +316,11 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildDestSuggestionList() {
     return Positioned(
-      top: 250, // Adjust based on your layout
+      top: MediaQuery.of(context).size.height * 0.34, // Adjust based on your layout
       left: 0,
       right: 0,
       child: Container(
+        margin: EdgeInsets.only(left: 12, right: 12),
         height: 200,
         color: Color.fromARGB(255, 66, 66, 66),
         child: ListView.builder(

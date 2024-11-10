@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:transport_app/Navbar.dart';
 import 'package:transport_app/Screens/Community.dart';
+import 'package:transport_app/Screens/Home.dart';
 import 'package:transport_app/Screens/Login.dart';
 import 'package:transport_app/Screens/Post.dart';
 
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: LoginPage(),
+      home: Navbar(username: AutofillHints.username, email: AutofillHints.email)
     );
   }
 }

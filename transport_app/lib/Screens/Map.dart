@@ -475,6 +475,7 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 19, 16, 25),
       appBar: AppBar(
         title: Text('Route Map'),
       ),
