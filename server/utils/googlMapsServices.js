@@ -26,7 +26,6 @@ function getDirections(userSelectionObject) {
         origin: userSelectionObject.src,
         destination: userSelectionObject.destn,
         mode: userSelectionObject.mode,
-        avoid: userSelectionObject.avoid,
         alternatives: true,
         departure_time: 'now',
         units: 'metric',
